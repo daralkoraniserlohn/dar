@@ -1,5 +1,5 @@
 // Simple service worker for Qur'an School PWA
-const CACHE_NAME = 'quran-school-cache-v1';
+const CACHE_NAME = 'quran-school-cache-v2';
 const URLS_TO_CACHE = [
   './',
   './index.html',
