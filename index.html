@@ -432,6 +432,27 @@ html[dir="ltr"] .close-icon { left: auto; right: 15px; }
 
 .user-action-btn { background: var(--surface-2); border: none; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); }
 
+
+
+/* Admin -> Benutzer: grouped user list */
+.user-group-card{
+  /* .card is flex-row by default; we need stacked layout (title on top, users under it) */
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:10px;
+  padding:12px;
+}
+.user-group-header{ width:100%; }
+
+.user-group-header { display:flex; align-items:center; justify-content:space-between; gap:12px; cursor:pointer; user-select:none; }
+.user-group-title { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.user-group-chevron { transition: transform 0.18s ease; opacity: 0.85; }
+.user-group-chevron.open { transform: rotate(180deg); }
+
+.user-group-body { margin-top: 10px; display:flex; flex-direction:column; gap:8px; }
+.user-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border-radius: 12px; background: var(--surface-2); }
+
 /* TAB CONTROLS for Modals */
 .tab-controls { display: flex; margin-bottom: 1rem; border-bottom: 1px solid var(--border); }
 .tab-ctrl { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: var(--text-sec); border-bottom: 2px solid transparent; font-size: 0.9rem; }
@@ -451,82 +472,7 @@ html[dir="ltr"] .close-icon { left: auto; right: 15px; }
 .lesson-meta { font-size:0.85rem; color: var(--text-sec); margin-top: 2px; }
 
 /* --- FLOATING AUDIO PLAYER --- */
-.floating-audio-player {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: var(--surface);
-  padding: 12px 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-  z-index: 99;
-  transform: translateY(calc(-100% - 2px));
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  border-bottom: 1px solid var(--border);
-}
-.floating-audio-player.show {
-  transform: translateY(var(--header-h, 0px));
-}
-.floating-audio-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-.floating-audio-title {
-  font-weight: bold;
-  font-size: 0.9rem;
-  color: var(--koran-player-accent);
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.floating-audio-close {
-  background: var(--surface-2);
-  border: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: var(--text-sec);
-  flex-shrink: 0;
-}
-.floating-audio-controls {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 8px;
-  flex-wrap: wrap;
-}
-.floating-audio-progress {
-  width: 100%;
-  height: 4px;
-  background: var(--surface-2);
-  border-radius: 2px;
-  margin: 8px 0;
-  overflow: hidden;
-}
-.floating-audio-progress-fill {
-  height: 100%;
-  background: var(--koran-player-accent);
-  width: 0%;
-  transition: width 0.1s;
-}
-.floating-audio-info {
-  font-size: 0.75rem;
-  color: var(--text-sec);
-  margin-top: 5px;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* (تم إزالة ستايل المشغل القديم لتفادي ظهوره لحظة ثم اختفائه. ستايل المشغل الحالي موجود أسفل الملف.) */
 
 /* Quran Search Bar in Lesson Modal */
 .quran-search-bar {
@@ -791,6 +737,12 @@ html[dir="ltr"] .close-icon { left: auto; right: 15px; }
   transition: transform 0.22s ease;
 }
 .lesson-immersive-bar.show{ transform: translateY(0); }
+/* No top immersive controls in memorization (Hausaufgaben) overlay */
+body.lesson-memo-open #lesson-immersive-bar,
+body.lesson-memo-open #lesson-immersive-handle{ display:none !important; }
+
+/* Remove Quran search option from memorization (Hausaufgaben) overlay */
+body.lesson-memo-open #lesson-modal .quran-search-bar{ display:none !important; }
 #lesson-modal:not(.immersive) .lesson-immersive-bar{ display:none; }
 
 .lesson-immersive-btn{
@@ -875,6 +827,29 @@ html[dir="ltr"] .close-icon { left: auto; right: 15px; }
   line-height: 2.05rem;
   font-family: 'Alexandria', system-ui, -apple-system, Segoe UI, sans-serif;
 }
+
+/* Word-by-word pronunciation (click a word to hear it) */
+.ayah-word{
+  display:inline-block;
+  cursor:pointer;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin: 0 1px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, transform 0.15s ease;
+  user-select:none;
+}
+.ayah-word:hover{
+  background: rgba(10,132,255,0.12);
+}
+.ayah-word:active{
+  transform: scale(0.98);
+}
+.ayah-word.playing{
+  background: rgba(10,132,255,0.18);
+  box-shadow: 0 0 0 1px rgba(10,132,255,0.35) inset;
+}
 .ayah-card-tr{
   margin-top: 8px;
   color: var(--text-sec);
@@ -884,6 +859,16 @@ html[dir="ltr"] .close-icon { left: auto; right: 15px; }
 }
 
 
+
+.ayah-card-tr.phonetic{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  direction: ltr;
+}
+.audio-btn.active{
+  box-shadow: 0 0 0 1px rgba(10,132,255,0.45) inset;
+  background: rgba(10,132,255,0.18);
+  color: var(--text);
+}
 /* Floating reader toggle (student) */
 .reader-fab{
   position: fixed;
@@ -1939,6 +1924,27 @@ body.dark .bulk-list{
   user-select:none;
 }
 .hw-mini-toggle input{ transform: scale(1.05); }
+.hw-mini-stack{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:4px;
+}
+.hw-mini-edit-btn{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size:0.8rem;
+  cursor:pointer;
+}
+.hw-mini-edit-btn i{ font-size:0.85rem; }
+.hw-mini-edit-btn:active{ transform: scale(0.98); }
+.hw-mini-edit-btn:disabled{ opacity:0.5; cursor:not-allowed; }
 
 /* Homework confirmation colors */
 .bulk-row.hw-all-confirmed{
@@ -1978,6 +1984,43 @@ body.dark-mode .hw-all-item.hw-pending{ background: rgba(255,214,10,0.10); }
 body.dark-mode .student-hw-card.hw-confirmed{ background: rgba(50,215,75,0.10); }
 body.dark-mode .student-hw-card.hw-pending{ background: rgba(255,214,10,0.10); }
 
+
+/* Student homework tab: make cards more compact (about half height) */
+#tab-student-homework .student-hw-card{
+  padding: 6px 10px !important;
+  margin-bottom: 4px !important;
+  gap: 4px !important; /* compact vertical spacing between lines */
+}
+#tab-student-homework .student-hw-card .text-sm{
+  line-height: 1.15;
+}
+#tab-student-homework .student-hw-card > *{ margin:0 !important; }
+#tab-student-homework .student-hw-card .btn{
+  margin-top: 0 !important;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+#tab-student-homework .stu-hw-actions{
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* Student home: compact homework notification cards too */
+#stu-home-hw-card .student-hw-card{
+  padding: 6px 10px !important;
+  margin-bottom: 4px !important;
+  gap: 4px !important;
+}
+#stu-home-hw-card .student-hw-card .text-sm{ line-height: 1.15; }
+#stu-home-hw-card .student-hw-card > *{ margin:0 !important; }
+#stu-home-hw-card .student-hw-card .btn{ margin-top:0 !important; }
+
+/* Student home: compact achievements progress card spacing */
+#student-home-achievements .card.flex-col{
+  gap: 4px !important;
+}
 
 /* Quick-assign (+) rows: per-student surah + ayah range + send */
 .hw-qa-row{
@@ -2944,7 +2987,7 @@ body.koran-mode{
   border: none;
   box-shadow: none;
   transform: none !important;
-  z-index: 120;
+  z-index: 2147483647;
   display: none;
 }
 .floating-audio-player.show{ display:block; }
@@ -2980,6 +3023,54 @@ body.koran-mode{
   overflow: auto;
 }
 .floating-audio-player.expanded .floating-audio-panel{ transform: translateY(0); }
+/* --- MEMORIZE MODAL: keep the player visible while the memorization window is open --- */
+/* --- MEMORIZE MODAL: show the player as a FLOATING card فوق نافذة الحفظ --- */
+body.lesson-memo-open #floating-audio-player{
+  display:block !important;
+  z-index: 2147483647 !important;
+
+  /* floating above the memorization modal */
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+  transform: translateX(-50%) !important;
+
+  width: min(560px, calc(100vw - 24px)) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+body.lesson-memo-open #floating-audio-player .audio-fab-btn{ display:none !important; }
+body.lesson-memo-open #floating-audio-player .floating-audio-close{ display:none !important; }
+
+/* panel becomes a card (not a bottom-sheet) */
+body.lesson-memo-open #floating-audio-player .floating-audio-panel{
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+
+  transform: none !important;
+  border-radius: 18px !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.28) !important;
+
+  max-height: 42vh;
+  overflow: auto;
+  padding-bottom: 14px;
+}
+
+body.lesson-memo-open #lesson-modal .modal-content{
+  /* keep space so the floating player doesn't cover the last ayat */
+  padding-bottom: calc(170px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* Ensure the floating player stays ABOVE the memorization modal */
+body.lesson-memo-open #lesson-modal.modal-overlay{ z-index: 2000 !important; }
+body.lesson-memo-open #floating-audio-player{ z-index: 2147483647 !important; }
+
 
 .floating-audio-header{
   display:flex;
@@ -3300,6 +3391,23 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
   flex-wrap:wrap;
   align-items:center;
 }
+
+.group-card-extra{
+  margin-top: 4px;
+  color: var(--text-sec);
+  font-size: 0.85rem;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.group-card-extra .line{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.group-card-extra .line i{
+  opacity: .9;
+}
 .badge-pill{
   display:inline-flex;
   align-items:center;
@@ -3551,6 +3659,10 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
   cursor: pointer;
 }
 .qc-actions button:active{ transform: scale(0.99); opacity: 0.9; }
+
+
+/* Hide legacy qc audio bar (replaced by site floating player) */
+#koranAudioBar, #qcAudioSheetBackdrop, #koranAudioAdvanced{ display:none !important; }
 </style>
 </head>
 <body>
@@ -3648,15 +3760,16 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
         <button class="audio-btn" onclick="togglePlayPause()" id="btn-play-pause" title="تشغيل/إيقاف">▶</button>
         <button class="audio-btn sec" onclick="nextAyah()" id="btn-next-ayah" title="التالي">▶▶</button>
 
-        <select id="floating-audio-repeat" class="form-select" style="width:auto; padding:6px 8px; font-size:0.8rem;" title="تكرار">
+        <select id="floating-audio-repeat" class="form-select" style="width:50px; padding:6px 8px; font-size:0.8rem;" title="تكرار">
           <option value="1">1×</option>
           <option value="2">2×</option>
           <option value="3">3×</option>
           <option value="5">5×</option>
           <option value="10">10×</option>
+                  <option value="inf">∞</option>
         </select>
 
-        <select id="floating-audio-speed" class="form-select" style="width:auto; padding:6px 8px; font-size:0.8rem;" title="السرعة">
+        <select id="floating-audio-speed" class="form-select" style="width:50px; padding:6px 8px; font-size:0.8rem;" title="السرعة">
           <option value="0.75">0.75×</option>
           <option value="1" selected>1×</option>
           <option value="1.25">1.25×</option>
@@ -3773,18 +3886,18 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
 </div>
 
 
-    <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;" id="student-home-alerts"></div>
-    <div class="card flex-col" id="stu-home-hw-card" style="align-items:flex-start; margin-top:12px;">
+    <div style="margin-top:12px; display:flex; flex-direction:column; gap:4px;" id="student-home-alerts"></div>
+    <div class="card flex-col hidden" id="stu-home-hw-card" style="align-items:flex-start; margin-top:12px; cursor:pointer;" onclick="openStudentHomeworkShortcut(event)">
       <div style="display:flex; align-items:center; justify-content:space-between; width:100%; gap:10px;">
         <div id="stu-home-hw-title" style="font-weight:900;">Hausaufgaben</div>
         <button class="btn btn-sm" type="button" onclick="switchTab('student-homework')">
           <i class="fa-solid fa-list-check"></i>
         </button>
       </div>
-      <div id="student-home-homework-list" style="width:100%; display:flex; flex-direction:column; gap:6px; margin-top:10px;"></div>
+      <div id="student-home-homework-list" style="width:100%; display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>
     </div>
 
-        <div id="student-home-achievements" style="margin-top:14px; display:flex; flex-direction:column; gap:8px;"></div>
+        <div id="student-home-achievements" style="margin-top:14px; display:flex; flex-direction:column; gap:4px;"></div>
   </div>
 </main>
 
@@ -3848,7 +3961,7 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
       </div>
     </aside>
 
-        <div id="koranAudioBar" class="qc-audio-bar" dir="rtl" aria-live="polite">
+        <div id="koranAudioBar" class="qc-audio-bar" hidden dir="rtl" aria-live="polite">
   <div class="qc-progress">
     <input id="koranSeek" type="range" min="0" max="1000" value="0" aria-label="شريط التقدم">
   </div>
@@ -4042,7 +4155,12 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
           </button>
         </div>
 
-        <div class="comm-chips">
+        <div class="comm-chips" id="msg-box-chips">
+          <button class="chip active" type="button" id="msg-chip-inbox" onclick="setMsgBox('inbox')">Eingang</button>
+          <button class="chip" type="button" id="msg-chip-sent" onclick="setMsgBox('sent')">Gesendet</button>
+        </div>
+
+        <div class="comm-chips" id="msg-filter-chips">
           <button class="chip active" type="button" id="msg-chip-all" onclick="setMsgFilter('all')">Alle</button>
           <button class="chip" type="button" id="msg-chip-unread" onclick="setMsgFilter('unread')">Ungelesen</button>
         </div>
@@ -4120,10 +4238,7 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
         <button class="icon-btn" id="hw-admin-add-toggle" type="button" onclick="toggleHomeworkAdminAssignMode()" title="+">
           <i class="fa-solid fa-plus"></i>
         </button>
-        <button class="icon-btn" id="hw-admin-manage-toggle" type="button" onclick="toggleHomeworkAdminManageMode()" title="-">
-          <i class="fa-solid fa-minus"></i>
-        </button>
-      </div>
+</div>
       </div>
 
       <div class="card flex-col hw-admin-card" style="align-items:flex-start;">
@@ -4258,13 +4373,7 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
                 <i class="fa-solid fa-pen"></i>
                 <span id="txt-hw-admin-manage-edit">Bearbeiten</span>
               </button>
-
-              <button class="btn danger" type="button" id="btn-hw-admin-manage-delete" onclick="homeworkAdminManageDeleteSelected()">
-                <i class="fa-solid fa-trash"></i>
-                <span id="txt-hw-admin-manage-delete">Löschen</span>
-              </button>
-
-              <button class="btn primary hidden" type="button" id="btn-hw-admin-manage-save" onclick="homeworkAdminManageSaveChanges()">
+<button class="btn primary hidden" type="button" id="btn-hw-admin-manage-save" onclick="homeworkAdminManageSaveChanges()">
                 <i class="fa-solid fa-check"></i>
                 <span id="txt-hw-admin-manage-save">Speichern</span>
               </button>
@@ -4309,7 +4418,7 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
       <h3 id="lbl-manage-users">Verwaltung</h3>
 
       <div class="segmented-tabs" id="admin-branches">
-        <button class="segmented-btn active" id="btn-branch-users" onclick="switchAdminBranch('users')">
+        <button class="segmented-btn" id="btn-branch-users" onclick="switchAdminBranch('users')">
           <i class="fa-solid fa-users"></i>
           <span id="lbl-branch-users">Benutzer</span>
         </button>
@@ -4317,13 +4426,13 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
           <i class="fa-solid fa-hourglass-half"></i>
           <span id="lbl-branch-waitlist">Warteliste</span>
         </button>
-        <button class="segmented-btn" id="btn-branch-groups" onclick="switchAdminBranch('groups')">
+        <button class="segmented-btn" active id="btn-branch-groups" onclick="switchAdminBranch('groups')">
           <i class="fa-solid fa-layer-group"></i>
           <span id="lbl-branch-groups">Gruppen</span>
         </button>
       </div>
 
-      <div id="admin-branch-users" class="admin-section">
+      <div id="admin-branch-users" class="admin-section hidden">
         <div id="users-list-container" style="display:flex; flex-direction:column; gap:10px; margin-top:1rem; padding-bottom: 80px;"></div>
         <button class="fab-user-add" id="fab-add-user" onclick="openAddUser()">
           <i class="fa-solid fa-plus"></i>
@@ -4335,7 +4444,7 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
         <div id="waitlist-list-container" style="display:flex; flex-direction:column; gap:10px; margin-top:1rem; padding-bottom: 80px;"></div>
       </div>
 
-      <div id="admin-branch-groups" class="admin-section hidden">
+      <div id="admin-branch-groups" class="admin-section">
         <div class="text-sm text-sec" id="lbl-groups-hint" style="margin-top:10px;">—</div>
         <div id="groups-cards-container" style="display:flex; flex-direction:column; gap:10px; margin-top:1rem; padding-bottom: 80px;"></div>
       </div>
@@ -4400,6 +4509,55 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
         <p id="progress-text" class="progress-text">0/0</p>
         <p id="success-msg" class="success-msg"><i class="fa-solid fa-circle-check"></i> Daten erfolgreich übertragen!</p>
     </div>
+</div>
+
+<div class="modal-overlay" id="hw-edit-modal">
+  <div class="modal-content">
+    <button class="close-icon" onclick="closeModal('hw-edit-modal')"><i class="fa-solid fa-xmark"></i></button>
+    <h2 id="hw-edit-title">Hausaufgabe bearbeiten</h2>
+
+    <div class="form-group">
+      <label class="form-label">Aufgabe-Typ • نوع الواجب</label>
+      <div class="hw-admin-type-seg" style="gap:8px;">
+        <button id="hw-edit-type-quran" class="seg-btn" type="button" onclick="setHwEditType('quran')">واجب قرآني</button>
+        <button id="hw-edit-type-text" class="seg-btn" type="button" onclick="setHwEditType('text')">نص حر</button>
+      </div>
+    </div>
+
+    <div id="hw-edit-quran-fields">
+      <div class="form-group">
+        <label class="form-label">Sure (Name/Nr)</label>
+        <input type="text" id="hw-edit-surah" class="form-input" placeholder="z.B. Al-Baqara">
+        <div id="hw-edit-surah-dd" class="card hidden" style="margin-top:6px; padding:8px; max-height:180px; overflow:auto;"></div>
+      </div>
+
+      <div class="flex gap-2">
+        <div class="form-group w-full">
+          <label class="form-label">Von Vers</label>
+          <input type="number" id="hw-edit-start" class="form-input">
+        </div>
+        <div class="form-group w-full">
+          <label class="form-label">Bis Vers</label>
+          <input type="number" id="hw-edit-end" class="form-input">
+        </div>
+      </div>
+    </div>
+
+    <div id="hw-edit-text-fields" class="hidden">
+      <div class="form-group">
+        <label class="form-label">Text • نص</label>
+        <textarea id="hw-edit-text" class="form-input" rows="3" style="min-height:90px; resize:vertical;" placeholder="اكتب نص الواجب..."></textarea>
+      </div>
+    </div>
+
+    <div class="flex gap-2" style="margin-top:12px; flex-direction:column;">
+      <div class="flex gap-2">
+        <button class="btn primary" type="button" onclick="saveHomeworkEdit()" id="btn-hw-edit-save"><i class="fa-solid fa-check"></i> <span>Speichern</span></button>
+        <button class="btn btn-sec" type="button" onclick="closeModal('hw-edit-modal')" id="btn-hw-edit-cancel"><i class="fa-solid fa-xmark"></i> <span>Abbrechen</span></button>
+      </div>
+      <div class="text-sm text-sec" id="hw-edit-status" style="min-height:18px;"></div>
+    </div>
+  </div>
 </div>
 
 <div class="modal-overlay" id="detail-modal">
@@ -4649,31 +4807,17 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
       <div class="text-sm text-sec" id="lesson-hint">
         🎧 Play drücken • 📖 Bedeutung lesen
       </div>
-      <audio id="lesson-audio" controls class="w-full" style="width:100%;"></audio>
-      <div class="audio-row" style="flex-wrap:wrap; align-items:center; justify-content:space-between;">
-        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-          <span class="text-sm text-sec" id="lbl-repeat">Repeat</span>
-          <select id="lesson-repeat-count" class="form-select" style="width:auto; padding:8px 10px;">
-            <option value="1">1×</option>
-            <option value="2">2×</option>
-            <option value="3">3×</option>
-            <option value="5">5×</option>
-            <option value="10">10×</option>
-          </select>
-        </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="audio-btn" onclick="playAssignedRange()" id="btn-play-range">▶ Play Range</button>
-          <button class="audio-btn sec" onclick="stopRangePlayback()" id="btn-stop-range">■ Stop</button>
-        </div>
-      </div>
+      <audio id="lesson-audio" preload="none" style="display:none;"></audio>
+      <div class="lesson-memo-player-actions" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-start;">
+        <button class="audio-btn" onclick="playAssignedRange()" id="btn-play-range" title="Play / تشغيل">▶</button>
+        <button class="audio-btn sec" onclick="stopRangePlayback()" id="btn-stop-range" title="Stop / إيقاف">■</button>
+</div>
     </div>
 
     <div style="margin-top: 10px;">
       <div class="lesson-view-toolbar">
         <button class="pill-btn" onclick="toggleLessonTranslation()" id="btn-toggle-translation">📝 ترجمة</button>
-        <button class="pill-btn" onclick="adjustMushafFont(-1)" title="A−">A−</button>
-        <button class="pill-btn" onclick="adjustMushafFont(1)" title="A+">A+</button>
-      </div>
+</div>
 
       <div id="lesson-verses"></div>
       <div id="lesson-translation" class="lesson-translation hidden"></div>
@@ -4699,8 +4843,7 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
         <div class="quick-sheet-sub" id="qvs-sub">Doppeltippen: Bedeutung • 4× Tippen: Phonetik</div>
       </div>
       <div class="quick-sheet-actions">
-        <button class="quick-sheet-btn" id="qvs-copy" title="Kopieren" onclick="copyQuickVerseSheet()">⧉</button>
-        <button class="quick-sheet-btn quick-sheet-close" title="Schließen" onclick="hideQuickVerseSheet()"><i class="fa-solid fa-xmark"></i></button>
+<button class="quick-sheet-btn quick-sheet-close" title="Schließen" onclick="hideQuickVerseSheet()"><i class="fa-solid fa-xmark"></i></button>
       </div>
     </div>
     <div class="quick-sheet-ar" id="qvs-ar">—</div>
@@ -5014,7 +5157,7 @@ let state = {
   filter: { groups: [], days: [], search: '', financial: false, abgemeldet: false, waitlistOnly: false },
   filteredStudents: [],
   filteredWaitlist: [],
-  adminBranch: 'users',
+  adminBranch: 'groups',
   loginMode: 'auto',
   studentData: null,
   currentDetailStudent: null,
@@ -5048,6 +5191,21 @@ let floatingAudio = {
   mode: 'single'
 };
 
+
+// --- Ensure floating audio player is at top-level (above any modal overlays) ---
+(function ensureFloatingAudioOnBody(){
+  try{
+    const p = document.getElementById('floating-audio-player');
+    if(!p) return;
+    // Move to <body> to avoid being trapped under parent stacking contexts.
+    if(p.parentElement && p.parentElement !== document.body){
+      document.body.appendChild(p);
+    }
+    // Always allow interaction above overlays
+    p.style.pointerEvents = 'auto';
+  }catch(e){}
+})();
+
 // Attach an existing <audio> element to the floating player (pause/resume controls always visible)
 function attachFloatingPlayerToAudio(audioEl, opts={}) {
   if(!audioEl) return;
@@ -5056,9 +5214,9 @@ function attachFloatingPlayerToAudio(audioEl, opts={}) {
   if(opts.title) document.getElementById('floating-audio-title').textContent = opts.title;
   if(opts.info)  document.getElementById('floating-audio-info').textContent  = opts.info;
 
-  // In range mode we disable the repeat dropdown because range repeat is controlled by lesson UI
+  // Keep repeat available (works for single ayah and for assigned ranges)
   const rep = document.getElementById('floating-audio-repeat');
-  if(rep) rep.disabled = (floatingAudio.mode === 'range');
+  if(rep) rep.disabled = false;
 
   // Apply selected speed
   const sp = document.getElementById('floating-audio-speed');
@@ -5116,6 +5274,361 @@ function updateFloatingProgress(){
   }
 }
 
+
+// WORD-BY-WORD AUDIO (click on a word to hear its pronunciation)
+// Quran.com supports word-level audio via "audio_url" inside the "words" array (relative paths like "wbw/001_001_001.mp3").
+// We resolve it using the Qurancdn base.
+// Docs: https://api-docs.quran.foundation/docs/content_apis_versioned/verses-by-verse-key/
+const WBW_AUDIO_BASE = 'https://audio.qurancdn.com/';
+
+// Build a deterministic WBW audio path from verseKey + word position.
+// This avoids rare cases where API-provided audio_url can mismatch a token.
+// Pattern: wbw/002_080_008.mp3  (3-digit surah, ayah, word index)
+function __wbwPad3(n){
+  n = parseInt(n,10);
+  if(!n || isNaN(n)) n = 0;
+  return String(n).padStart(3,'0');
+}
+function __wbwBuildAudioPath(verseKey, pos){
+  try{
+    const parts = String(verseKey||'').split(':');
+    const s = parseInt(parts[0],10);
+    const a = parseInt(parts[1],10);
+    const p = parseInt(pos,10);
+    if(!s || !a || !p) return '';
+    return `wbw/${__wbwPad3(s)}_${__wbwPad3(a)}_${__wbwPad3(p)}.mp3`;
+  }catch(e){
+    return '';
+  }
+}
+
+const __wbwWordCache = new Map(); // verseKey -> words[]
+
+function __resolveWbwAudioUrl(audioPath){
+  if(!audioPath) return '';
+  if(/^https?:\/\//i.test(audioPath)) return audioPath;
+  const cleaned = String(audioPath).replace(/^\/+/, '');
+  return WBW_AUDIO_BASE + cleaned;
+}
+
+async function __fetchWbwWordsForVerse(verseKey){
+  if(__wbwWordCache.has(verseKey)) return __wbwWordCache.get(verseKey);
+
+  const url = `https://api.quran.com/api/v4/verses/by_key/${encodeURIComponent(verseKey)}?words=true&word_fields=audio_url,text_uthmani,char_type_name,position&fields=text_uthmani`;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('WBW request failed: ' + res.status);
+  const json = await res.json();
+  const words = (json && json.verse && Array.isArray(json.verse.words)) ? json.verse.words : [];
+  __wbwWordCache.set(verseKey, words);
+  return words;
+}
+
+// Single audio element for WBW playback
+let __wbwAudioEl = null;
+let __wbwResumeMain = null;
+
+function __ensureWbwAudioEl(){
+  if(__wbwAudioEl) return __wbwAudioEl;
+  __wbwAudioEl = new Audio();
+  __wbwAudioEl.preload = 'none';
+
+  __wbwAudioEl.addEventListener('ended', () => {
+    try{ document.querySelectorAll('.ayah-word.playing').forEach(s => s.classList.remove('playing')); }catch(e){}
+    try{ if(typeof __wbwResumeMain === 'function') __wbwResumeMain(); }catch(e){}
+    __wbwResumeMain = null;
+  });
+
+  __wbwAudioEl.addEventListener('error', () => {
+    try{ document.querySelectorAll('.ayah-word.playing').forEach(s => s.classList.remove('playing')); }catch(e){}
+    try{ if(typeof __wbwResumeMain === 'function') __wbwResumeMain(); }catch(e){}
+    __wbwResumeMain = null;
+  });
+
+  return __wbwAudioEl;
+}
+
+// Fallback: browser TTS (works only if the device has an Arabic voice installed)
+function __speakWordFallback(word){
+  if(!word) return;
+  if(!('speechSynthesis' in window)) return;
+  try{ window.speechSynthesis.cancel(); }catch(e){}
+  try{
+    const u = new SpeechSynthesisUtterance(word);
+    u.lang = 'ar-SA';
+    // Try to honor the current speed selector roughly
+    const sp = document.getElementById('floating-audio-speed');
+    if(sp){
+      const r = parseFloat(sp.value);
+      if(r && !isNaN(r)) u.rate = Math.max(0.6, Math.min(1.6, r));
+    }
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+function __playWbwWordFromSpan(span){
+  if(!span) return;
+  const audioPath = (span.dataset.audioGen || span.dataset.audio || '');
+  const wordText  = span.dataset.word  || span.textContent || '';
+
+  const url = __resolveWbwAudioUrl(audioPath);
+  if(!url){
+    __speakWordFallback(wordText);
+    return;
+  }
+
+  // Highlight
+  try{ document.querySelectorAll('.ayah-word.playing').forEach(s => s.classList.remove('playing')); }catch(e){}
+  span.classList.add('playing');
+
+  // Pause any main audio (range playback / lesson audio) while WBW plays to avoid overlap
+  const main = (floatingAudio && floatingAudio.audioElement) ? floatingAudio.audioElement : null;
+  const lessonA = document.getElementById('lesson-audio');
+  const koranA  = document.getElementById('koranAudio');
+
+  const wasMainPlaying   = !!(main && !main.paused);
+  const wasLessonPlaying = !!(lessonA && !lessonA.paused);
+  const wasKoranPlaying  = !!(koranA && !koranA.paused);
+
+  // Suspend auto-advance in range playback while WBW is active
+  try{ rangePlayback._suspendedByWbw = true; }catch(e){}
+
+  __wbwResumeMain = () => {
+    try{ rangePlayback._suspendedByWbw = false; }catch(e){}
+    if(wasMainPlaying && main){ main.play().catch(()=>{}); }
+    if(wasLessonPlaying && lessonA && lessonA !== main){ lessonA.play().catch(()=>{}); }
+    if(wasKoranPlaying && koranA && koranA !== main){ koranA.play().catch(()=>{}); }
+  };
+
+  try{ if(wasMainPlaying && main) main.pause(); }catch(e){}
+  try{ if(wasLessonPlaying && lessonA) lessonA.pause(); }catch(e){}
+  try{ if(wasKoranPlaying && koranA) koranA.pause(); }catch(e){}
+
+  const a = __ensureWbwAudioEl();
+  try{
+    // Set speed similar to main player speed
+    const sp = document.getElementById('floating-audio-speed');
+    if(sp){
+      const rate = parseFloat(sp.value);
+      a.playbackRate = (rate && !isNaN(rate)) ? rate : 1;
+    } else {
+      a.playbackRate = 1;
+    }
+
+    if(a.src !== url) a.src = url;
+    a.currentTime = 0;
+    a.play().catch(() => __speakWordFallback(wordText));
+  }catch(e){
+    __speakWordFallback(wordText);
+  }
+}
+
+function __pickWordSpanFromPoint(container, clientX, clientY){
+  if(!container) return null;
+  const spans = container.querySelectorAll('.ayah-word');
+  if(!spans || !spans.length) return null;
+
+  let best = null;
+  let bestScore = Infinity;
+
+  spans.forEach(sp => {
+    const r = sp.getBoundingClientRect();
+    // distance from point to rect (0 if inside)
+    const dx = (clientX < r.left) ? (r.left - clientX) : (clientX > r.right ? (clientX - r.right) : 0);
+    const dy = (clientY < r.top) ? (r.top - clientY) : (clientY > r.bottom ? (clientY - r.bottom) : 0);
+    const score = (dx*dx) + (dy*dy);
+
+    if(score < bestScore){
+      bestScore = score;
+      best = sp;
+    }
+  });
+
+  return best;
+}
+
+// Render clickable words inside a container using Quran.com "words" data (audio_url + text_uthmani)
+function __renderClickableAyahWords(container, verseKey, fallbackAyahText){
+  if(!container) return;
+
+  // show something immediately
+  container.textContent = fallbackAyahText || '';
+  container.dataset.verseKey = verseKey;
+
+  __fetchWbwWordsForVerse(verseKey).then(words => {
+    if(!Array.isArray(words) || words.length === 0) return;
+
+    // Build spans
+    container.innerHTML = '';
+    const frag = document.createDocumentFragment();
+
+    words.forEach(w => {
+      const ct = (w && w.char_type_name) ? String(w.char_type_name) : '';
+      // Keep "word" and also clitics if the API returns them (prefix/suffix).
+      if(ct && !['word','prefix','suffix'].includes(ct)) return;
+
+      const txt = (w && (w.text_uthmani || w.text)) ? String(w.text_uthmani || w.text).trim() : '';
+      if(!txt) return;
+
+      // Skip pure number markers if any (just in case)
+      if(/^[0-9\u0660-\u0669]+$/.test(txt)) return;
+
+      const sp = document.createElement('span');
+      sp.className = 'ayah-word';
+      sp.textContent = txt;
+      sp.dataset.word = txt;
+      const __pos = (w && w.position != null) ? String(w.position) : '';
+      sp.dataset.pos = __pos;
+      // Prefer deterministic path based on verseKey + position
+      sp.dataset.audioGen = (__pos ? __wbwBuildAudioPath(verseKey, __pos) : '');
+      // Keep API audio_url as a fallback
+      sp.dataset.audio = (w && w.audio_url) ? String(w.audio_url) : '';
+
+      frag.appendChild(sp);
+      frag.appendChild(document.createTextNode(' '));
+    });
+
+if(!frag.childNodes.length){
+      container.textContent = fallbackAyahText || '';
+      return;
+    }
+
+    container.appendChild(frag);
+    // Delegate clicks to the closest word span (more reliable for short words like حروف الجر)
+    if(!container.__wbwDelegated){
+      container.__wbwDelegated = true;
+      container.addEventListener('click', (e) => {
+        const sp = __pickWordSpanFromPoint(container, e.clientX, e.clientY) ||
+                   (e.target && e.target.closest ? e.target.closest('.ayah-word') : null);
+        if(!sp) return;
+        e.preventDefault();
+        e.stopPropagation();
+        __playWbwWordFromSpan(sp);
+      }, true);
+    }
+  }).catch(() => {
+    // keep fallback text
+  });
+}
+
+
+
+
+// --- Arabic -> simple phonetic (Arabizi-style) for memorization helper ---
+function __arabicToPhonetic(input){
+  try{
+    if(!input) return '';
+    // Normalize Arabic presentation forms & remove Quranic symbols that aren't letters
+    let s = String(input);
+
+    // Remove ayah markers, punctuation, tatweel
+    s = s.replace(/[\u06DD\u06DE\u06E9\u06D6-\u06ED\u0640]/g, ' ');
+    // Normalize some characters
+    s = s.replace(/[ٱ]/g,'ا').replace(/[ى]/g,'ي');
+
+    // Keep harakat for vowel heuristics
+    const FATHA = '\u064E';
+    const DAMMA = '\u064F';
+    const KASRA = '\u0650';
+    const SUKUN = '\u0652';
+    const SHADDA = '\u0651';
+    const TANWIN_F = '\u064B';
+    const TANWIN_D = '\u064C';
+    const TANWIN_K = '\u064D';
+
+    const isMark = (ch)=> /[\u064B-\u0652\u0670]/.test(ch); // includes dagger alif
+    const baseMap = {
+      'ا':'a','ب':'b','ت':'t','ث':'t','ج':'j','ح':'7','خ':'5',
+      'د':'d','ذ':'d','ر':'r','ز':'z','س':'s','ش':'sh','ص':'s','ض':'d',
+      'ط':'t','ظ':'z','ع':'3','غ':'8','ف':'f','ق':'9','ك':'k','ل':'l','م':'m',
+      'ن':'n','ه':'h','ة':'h','و':'w','ي':'y','ء':'', 'ئ':'', 'ؤ':'', 'أ':'', 'إ':'', 'آ':'a'
+    };
+
+    const out = [];
+    const chars = Array.from(s);
+
+    // Helper: get combining marks following index i
+    function collectMarks(i){
+      let j=i+1, marks='';
+      while(j<chars.length && isMark(chars[j])){ marks+=chars[j]; j++; }
+      return marks;
+    }
+    function nextBaseIndex(i){
+      let j=i+1;
+      while(j<chars.length && isMark(chars[j])) j++;
+      return j;
+    }
+
+    for(let i=0;i<chars.length;i++){
+      const ch = chars[i];
+      if(ch === '\u0000') continue;
+
+      // spaces / punctuation
+      if(/\s/.test(ch)) { out.push(' '); continue; }
+      if(/[0-9\u0660-\u0669]/.test(ch)) continue; // ignore numbers
+      if(isMark(ch)) continue;
+
+      const marks = collectMarks(i);
+      const nb = chars[nextBaseIndex(i)] || '';
+
+      // base consonant (special-case lam-alif ligature)
+      if(ch === 'ﻻ' || ch === 'لا'){ out.push('la'); continue; }
+
+      let cons = baseMap[ch] != null ? baseMap[ch] : ch;
+
+      // Shadda doubles consonant (except multi-letter digraphs)
+      if(marks.includes(SHADDA)){
+        cons = cons + cons;
+      }
+
+      // Determine vowel from marks (support tanween as -n endings)
+      let vowel = '';
+      if(marks.includes(TANWIN_F)) vowel = 'an';
+      else if(marks.includes(TANWIN_K)) vowel = 'in';
+      else if(marks.includes(TANWIN_D)) vowel = 'on';
+      else if(marks.includes(FATHA) || marks.includes('\u0670')) vowel = 'a';
+      else if(marks.includes(KASRA)) vowel = 'i';
+      else if(marks.includes(DAMMA)) vowel = 'o';
+      else if(marks.includes(SUKUN)) vowel = '';
+
+// Long vowel heuristics: FATHA + ا , KASRA + ي , DAMMA + و
+      // To match user style (9ol a3odo) we keep single vowel letter and skip the long-vowel carrier.
+      const v0 = vowel ? vowel[0] : '';
+      if(v0 && ((v0==='a' && nb==='ا') || (v0==='i' && nb==='ي') || (v0==='o' && nb==='و'))){
+        // skip the carrier on next iteration
+        // mark next base char as consumed by replacing it with space
+        chars[nextBaseIndex(i)] = '\u0000';
+      }
+
+      // If this is a carrier letter without its own vowel marks, render as vowel-ish in some contexts
+      if((ch==='و' || ch==='ي') && !vowel && !marks){
+        // default to 'o' or 'i' when used as vowel
+        // simple heuristic: if previous output ends with consonant, treat as vowel
+        const prev = out.length ? out[out.length-1] : '';
+        if(ch==='و') cons = 'o';
+        if(ch==='ي') cons = 'i';
+      }
+
+      // Special-case ta marbuta at end-of-word: prefer waqf form "...ah" and ignore tanween endings
+      if(ch === 'ة'){
+        const nextBase = nb;
+        const endWord = (!nextBase) || /\s/.test(nextBase) || /[\.,;:!\?،؛؟]/.test(nextBase);
+        if(endWord){
+          out.push('ah');
+          continue;
+        }
+      }
+
+out.push(cons + vowel);
+    }
+
+    // cleanup spaces
+    return out.join('')
+      .replace(/\s+/g,' ')
+      .replace(/(^\s+|\s+$)/g,'');
+  }catch(e){
+    return String(input || '');
+  }
+}
 
 // I18N
 const i18n = {
@@ -5387,6 +5900,89 @@ function hideFloatingAudio() {
     updatePlayPauseButton();
   }
 }
+
+// Keep the floating player visible while the memorization modal is open
+function __syncLessonMemoPlayer(isOpen){
+  try{
+    const modal = document.getElementById('lesson-modal');
+    const vm = modal ? (modal.dataset.viewMode || '') : '';
+
+    // Memorization (Hausaufgaben) overlay behavior
+    if(vm === 'memorize'){
+      const fp = document.getElementById('floating-audio-player');
+
+      if(isOpen){
+        document.body.classList.add('lesson-memo-open');
+
+        // Make sure the floating player is visible فوق نافذة الحفظ
+        if(fp){
+          fp.classList.add('show');
+          fp.classList.add('expanded');
+          fp.classList.remove('collapsed');
+        }
+
+        // Default to infinite loop for memorization range (repeat all)
+        const rep = document.getElementById('floating-audio-repeat');
+        if(rep){
+          try{
+            if(!Array.from(rep.options || []).some(o => String(o.value) === 'inf')){
+              const opt = document.createElement('option');
+              opt.value = 'inf';
+              opt.textContent = '∞';
+              rep.appendChild(opt);
+            }
+          }catch(e){}
+          rep.value = 'inf';
+        }
+
+        // Attach floating player to lesson audio (even if paused) so speed works immediately
+        const la = document.getElementById('lesson-audio');
+        if(la){
+          attachFloatingPlayerToAudio(la, {
+            mode:'single',
+            title: (state.lang === 'de') ? 'Hausaufgaben Audio' : 'صوت الحفظ',
+            info: (state.lang === 'de') ? 'Bereit' : 'جاهز'
+          });
+        }
+        return;
+      }
+
+      // Closing memorization overlay: KEEP audio playing + keep player visible
+      document.body.classList.remove('lesson-memo-open');
+      if(fp){
+        fp.classList.add('show');
+        // keep as a small floating card when the modal is closed
+        fp.classList.remove('expanded');
+        fp.classList.add('collapsed');
+      }
+      return;
+    }
+
+    // Non-memorize view: original behavior
+    if(isOpen){
+      return;
+    }
+
+    document.body.classList.remove('lesson-memo-open');
+
+    // Clean up lesson audio bindings (only when not memorize)
+    const la = document.getElementById('lesson-audio');
+    try{
+      if(la){
+        la.onended = null;
+      }
+    }catch(e){}
+
+    // Hide only if the floating player is currently attached to the lesson audio
+    try{
+      if(window.floatingAudio && la && floatingAudio.audioElement === la){
+        hideFloatingAudio();
+      }
+    }catch(e){}
+  }catch(e){}
+}
+
+
 
 function setupFloatingAudio(surah, start, end, verses) {
   floatingAudio.mode = 'single';
@@ -5897,6 +6493,42 @@ function saveRemembered(lastType){
   try{ localStorage.setItem(rememberedKey(), JSON.stringify(payload)); }catch(e){}
 }
 
+// Auto-login on next visits when "Angemeldet bleiben" is enabled.
+// This uses the stored identifier + PIN (saved only when the checkbox is checked).
+function autoLoginIfRemembered(){
+  try{
+    // Avoid repeated auto attempts within the same tab session
+    if(sessionStorage.getItem('qs_auto_login_tried') === '1') return;
+    sessionStorage.setItem('qs_auto_login_tried','1');
+  }catch(e){}
+
+  let remember = false;
+  let id = '';
+  let pin = '';
+  try{
+    const raw = localStorage.getItem(rememberedKey());
+    if(raw){
+      const obj = JSON.parse(raw);
+      remember = !!obj.remember;
+      id  = obj.identifier || obj.staffUser || obj.studentId || '';
+      pin = obj.pin || obj.staffPin || obj.studentPin || '';
+    }
+  }catch(e){}
+
+  if(!remember) return;
+  if(!id || !pin) return;
+
+  try{ document.getElementById('chk-remember').checked = true; }catch(e){}
+  try{ const idEl = document.getElementById('login-identifier'); if(idEl) idEl.value = id; }catch(e){}
+  try{ const pinEl = document.getElementById('login-pin'); if(pinEl) pinEl.value = pin; }catch(e){}
+
+  try{ showLoginLoading(true, (state.lang==='ar' ? 'تسجيل الدخول تلقائياً…' : 'Automatische Anmeldung…')); }catch(e){}
+  // Let the UI paint the loading overlay first
+  setTimeout(()=>{ try{ doLogin(); }catch(e2){ try{ showLoginLoading(false); }catch(e3){} } }, 60);
+}
+
+
+
 function toggleLoginMode(mode) {
   state.loginMode = mode;
 
@@ -6265,6 +6897,13 @@ try{ if(studentPollingInterval){ clearInterval(studentPollingInterval); studentP
     }
   }catch(e){}
 
+
+  // Explicit logout: disable auto-login next time
+  try{
+    localStorage.removeItem(rememberedKey());
+    const chk = document.getElementById('chk-remember');
+    if(chk) chk.checked = false;
+  }catch(e){}
   try{ renderSavedProfiles(); }catch(e){}
 
   try{ document.getElementById('login-identifier')?.focus(); }catch(e){}
@@ -6965,6 +7604,63 @@ function markStudentHomeworkSeenOne(rowIndex, btn){
   }
 }
 
+
+// --- Student Homework quick-open helpers (Home card + item cards) ---
+function openQuranAt(surahNum, ayahStart, ayahEnd, opts = {}){
+  // Opens the memorization modal for the given range WITHOUT showing the full Koran reader page.
+  // Used by homework cards/buttons.
+  const s = Number(surahNum||0);
+  const a1 = Number(ayahStart||0);
+  const a2 = Number(ayahEnd||0);
+
+  // If something is missing, just open the homework list.
+  if(!s || !a1 || !a2) { try{ switchTab('student-homework'); }catch(e){} return; }
+
+  // Keep the student in the homework view (Hausaufgaben) and open the memorize overlay.
+  try{ switchTab('student-homework'); }catch(e){}
+
+  try{
+    openLesson(s, a1, a2, { viewMode: 'memorize' });
+  }catch(e){
+    // fallback
+    try{ openLesson(s, a1, a2); }catch(_e){}
+  }
+}
+
+function openStudentHomeworkShortcut(ev){
+  try{
+    const t = ev && ev.target;
+    // don't hijack clicks on internal buttons or the list itself
+    if(t && (t.closest('button') || t.closest('#student-home-homework-list'))) return;
+  }catch(e){}
+  const list = (state && Array.isArray(state.studentHomework)) ? state.studentHomework : [];
+  const unseen = list.filter(hw => !isParentSeenHomework(hw));
+  const base = unseen.length ? unseen : list;
+
+  const sorted = base.slice().sort((a,b)=>{
+    const da = String(a?.date || '');
+    const db = String(b?.date || '');
+    if(db !== da) return db.localeCompare(da);
+    return (Number(b?.rowIndex)||0) - (Number(a?.rowIndex)||0);
+  });
+
+  const pick = sorted.find(hw=>{
+    const info = decodeHomeworkSurah(hw?.surah);
+    const s1 = getAyahStart(hw);
+    const s2 = getAyahEnd(hw);
+    return !!info.surahNum && !!s1 && !!s2;
+  });
+
+  if(pick){
+    const info = decodeHomeworkSurah(pick.surah);
+    const s1 = getAyahStart(pick);
+    const s2 = getAyahEnd(pick);
+    openQuranAt(Number(info.surahNum), Number(s1), Number(s2), {from:'student-home-hw-card'});
+  }else{
+    switchTab('student-homework');
+  }
+}
+
 function renderStudentHomeworkCards(homeworkArr, contEl){
   if(!contEl) return;
   const list = Array.isArray(homeworkArr) ? homeworkArr : [];
@@ -6985,11 +7681,11 @@ function renderStudentHomeworkCards(homeworkArr, contEl){
         ? `<button class="btn btn-sm" type="button" style="width:100%;" onclick="markStudentHomeworkSeenOne(${Number(hw.rowIndex)}, this)">${state.lang==='de' ? 'Eltern bestätigen' : 'تأكيد ولي الأمر'}</button>`
         : '';
       contEl.innerHTML += `
-        <div class="card flex-col student-hw-card" style="align-items:flex-start; padding:12px; margin-bottom:6px;">
+        <div class="card flex-col student-hw-card" style="align-items:flex-start;">
           <div style="font-weight:900; color:var(--primary);">${state.lang==='de' ? 'Hausaufgabe' : 'واجب'}</div>
           <div class="text-sm" style="white-space:pre-wrap;">${escapeHtml(txt)}</div>
           <div class="text-sm text-sec">${meta} ${parentChip}</div>
-          ${confirmBtn ? `<div style="width:100%; margin-top:10px;">${confirmBtn}</div>` : ''}
+          ${confirmBtn ? `<div class="stu-hw-actions" style="flex-direction:column;">${confirmBtn}</div>` : ''}
         </div>`;
       return;
     }
@@ -7005,6 +7701,11 @@ function renderStudentHomeworkCards(homeworkArr, contEl){
     const rangeHtml = rangeTxt ? `<span class="hw-ayah-range ${confirmed ? 'confirmed' : 'pending'}">${rangeTxt}</span>` : '';
 
     const canOpen = !!info.surahNum && !!a1 && !!a2;
+    const cardOnclick = canOpen
+      ? `onclick="handleStudentHwCardClick(event, ${Number(info.surahNum)}, ${Number(a1)}, ${Number(a2)})"`
+      : '';
+    const cardCursor = canOpen ? 'cursor:pointer;' : '';
+
     const cardCls = confirmed ? 'hw-confirmed' : 'hw-pending';
     const confText = confirmed
       ? (state.lang === 'de' ? '✅ Bestätigt' : '✅ تم التسميع')
@@ -7018,15 +7719,15 @@ function renderStudentHomeworkCards(homeworkArr, contEl){
       : '';
 
     const actionsRow = (openBtn || confirmBtn)
-      ? `<div style="display:flex; gap:8px; width:100%; margin-top:10px;">${openBtn}${confirmBtn}</div>`
+      ? `<div class="stu-hw-actions">${openBtn}${confirmBtn}</div>`
       : '';
 
     contEl.innerHTML += `
-      <div class="card flex-col student-hw-card ${cardCls}" style="align-items:flex-start; padding:12px; margin-bottom:6px;">
+      <div class="card flex-col student-hw-card ${cardCls}" style="align-items:flex-start; ${cardCursor}" ${cardOnclick}>
         <div style="font-weight:bold; color:var(--primary);">${escapeHtml(info.label)} ${badge}</div>
         ${rangeHtml ? `<div class="text-sm">${state.lang === 'de' ? 'Verse' : 'الآيات'}: ${rangeHtml}</div>` : ''}
         <div class="text-sm text-sec">${meta} ${parentChip}</div>
-        <div class="text-sm" style="margin-top:6px; font-weight:800; color:${confirmed ? 'var(--success)' : 'var(--warning)'};">${confText}</div>
+        <div class="text-sm stu-hw-status" style="font-weight:800; color:${confirmed ? 'var(--success)' : 'var(--warning)'};">${confText}</div>
         ${actionsRow}
       </div>`;
   });
@@ -7040,6 +7741,7 @@ function loadStudentHomework() {
   }).then(r=>r.json()).then(res => {
       const contTab = document.getElementById('student-homework-list');
       const contHome = document.getElementById('student-home-homework-list');
+      const homeHwCard = document.getElementById('stu-home-hw-card');
 
       const pPanel = document.getElementById('stu-hw-parentseen-panel');
       const pTitle = document.getElementById('stu-hw-parentseen-title');
@@ -7049,6 +7751,8 @@ function loadStudentHomework() {
       _stuUnseenHomeworkRowIndices = [];
 
       if(res && res.ok && Array.isArray(res.homework) && res.homework.length > 0){
+        try{ state.studentHomework = res.homework || []; }catch(e){}
+
         // Track unseen rows for "confirm all"
         res.homework.forEach(hw=>{
           const parentSeen = isParentSeenHomework(hw);
@@ -7067,13 +7771,18 @@ function loadStudentHomework() {
           return (Number(b?.rowIndex)||0) - (Number(a?.rowIndex)||0);
         });
         const toShow = unseenSorted.slice(0, 3);
+
+        // Home card is notification-only: hide it when there are NO new (unseen) items.
+        // (Student can still access "Aufgaben" via bottom navigation.)
+        if(homeHwCard) homeHwCard.classList.toggle('hidden', toShow.length === 0);
+
         if(contHome){
           if(toShow.length === 0){
             contHome.innerHTML = `<div class="text-sec text-center">${state.lang==='de' ? 'Keine neuen Hausaufgaben.' : 'لا توجد واجبات جديدة.'}</div>`;
           } else {
             renderStudentHomeworkCards(toShow, contHome);
             if(unseenSorted.length > toShow.length){
-              contHome.innerHTML += `<div class="text-sm text-sec" style="margin-top:6px; text-align:center;">${state.lang==='de' ? `+${unseenSorted.length - toShow.length} weitere…` : `+${unseenSorted.length - toShow.length} أخرى…`} <button class="btn btn-sm btn-sec" type="button" style="margin-top:6px; width:100%;" onclick="switchTab('student-homework')">${state.lang==='de' ? 'Alle anzeigen' : 'عرض الكل'}</button></div>`;
+              contHome.innerHTML += `<div class="text-sm text-sec" style="margin-top:4px; text-align:center;">${state.lang==='de' ? `+${unseenSorted.length - toShow.length} weitere…` : `+${unseenSorted.length - toShow.length} أخرى…`} <button class="btn btn-sm btn-sec" type="button" style="margin-top:4px; width:100%;" onclick="switchTab('student-homework')">${state.lang==='de' ? 'Alle anzeigen' : 'عرض الكل'}</button></div>`;
             }
           }
         }
@@ -7084,10 +7793,13 @@ function loadStudentHomework() {
         if(pTitle) pTitle.textContent = (state.lang==='de' ? 'Eltern bestätigen' : 'تأكيد ولي الأمر');
         if(pHint)  pHint.textContent  = (state.lang==='de' ? 'Bestätige, dass ein Elternteil die Hausaufgaben gesehen hat.' : 'اضغط لتأكيد اطلاع ولي الأمر على الواجبات الحالية.');
         if(pBtn)   pBtn.textContent   = (state.lang==='de' ? 'Bestätigen' : 'تأكيد');
-      } else {
+      }
+      else {
+        try{ state.studentHomework = []; }catch(e){}
         if(contTab) contTab.innerHTML = `<div class="text-sec text-center">${state.lang==='de' ? 'Keine Hausaufgaben.' : 'لا توجد واجبات منزلية.'}</div>`;
         // Home is notification-only
         if(contHome) contHome.innerHTML = `<div class="text-sec text-center">${state.lang==='de' ? 'Keine neuen Hausaufgaben.' : 'لا توجد واجبات جديدة.'}</div>`;
+        if(homeHwCard) homeHwCard.classList.add('hidden');
         if(pPanel) pPanel.classList.add('hidden');
       }
 
@@ -7097,6 +7809,9 @@ function loadStudentHomework() {
       try{
         const contTab = document.getElementById('student-homework-list');
         const contHome = document.getElementById('student-home-homework-list');
+        const homeHwCard = document.getElementById('stu-home-hw-card');
+        // On errors, keep the card visible so the user can see the message.
+        if(homeHwCard) homeHwCard.classList.remove('hidden');
         if(contTab) contTab.innerHTML = `<div class="text-sec text-center">${escapeHtml(msg)}</div>`;
         if(contHome) contHome.innerHTML = `<div class="text-sec text-center">${escapeHtml(msg)}</div>`;
       }catch(_){}
@@ -7557,7 +8272,7 @@ function renderStudentHomeAchievements(){
   `;
 
   if(!progress.length){
-    cont.innerHTML += `<div class="text-sec text-center" style="padding:8px 0;">${state.lang === 'de' ? 'Noch keine bestätigten Fortschritte.' : 'لا توجد إنجازات مؤكدة حتى الآن.'}</div>`;
+    cont.innerHTML += `<div class="text-sec text-center" style="padding:4px 0;">${state.lang === 'de' ? 'Noch keine bestätigten Fortschritte.' : 'لا توجد إنجازات مؤكدة حتى الآن.'}</div>`;
     return;
   }
 
@@ -7565,13 +8280,13 @@ function renderStudentHomeAchievements(){
   const lastLabel = progressLastLabel_(progress);
 
   cont.innerHTML += `
-    <div class="card flex-col" style="align-items:flex-start; padding:12px; margin-top:8px;">
+    <div class="card flex-col" style="align-items:flex-start; padding:10px; margin-top:4px;">
       <div style="display:flex; width:100%; justify-content:space-between; align-items:flex-start; gap:10px;">
         <div style="font-weight:800; color:var(--primary);">${state.lang === 'de' ? 'Fortschritt' : 'تقدمي'}</div>
         <div class="text-sm text-sec" style="white-space:nowrap;">${state.lang === 'de' ? `${totalAyahs} Verse` : `${totalAyahs} آية`}</div>
       </div>
-      <div class="prog-inline" style="justify-content:flex-start; margin-top:8px;">${buildProgressInlineHtml_(progress)}</div>
-      <div class="text-sm text-sec" style="margin-top:8px;">${state.lang === 'de' ? 'Zuletzt' : 'آخر تحديث'}: <b>${escapeHtml(lastLabel)}</b></div>
+      <div class="prog-inline" style="justify-content:flex-start; margin-top:4px;">${buildProgressInlineHtml_(progress)}</div>
+      <div class="text-sm text-sec" style="margin-top:4px;">${state.lang === 'de' ? 'Zuletzt' : 'آخر تحديث'}: <b>${escapeHtml(lastLabel)}</b></div>
     </div>
   `;
 }
@@ -7734,6 +8449,216 @@ function decodeHomeworkSurah(raw){
   const surahNum = parseSurahNumber(surahText);
   const label = surahNum ? getSurahLabel(surahNum) : (surahText || (kind === 'text' ? (state.lang === 'de' ? 'Freier Text' : 'نص حر') : ''));
   return { kind, surahText, surahNum, label, freeText, badge };
+}
+
+
+
+
+// ===== Homework Edit (per entry) =====
+let hwEditCtx = null; // {ref,rowIndex,orig,origConfirmed,origDate,origTeacher}
+
+function setHwEditType(type){
+  type = (type === 'text') ? 'text' : 'quran';
+  const bQ = document.getElementById('hw-edit-type-quran');
+  const bT = document.getElementById('hw-edit-type-text');
+  if(bQ) bQ.classList.toggle('active', type==='quran');
+  if(bT) bT.classList.toggle('active', type==='text');
+
+  document.getElementById('hw-edit-quran-fields')?.classList.toggle('hidden', type!=='quran');
+  document.getElementById('hw-edit-text-fields')?.classList.toggle('hidden', type!=='text');
+  if(hwEditCtx) hwEditCtx.type = type;
+}
+
+function openHomeworkEditModal(ref, hw, rowIndex){
+  ref = String(ref||'').trim();
+  rowIndex = Number(rowIndex||0);
+  if(!ref || !rowIndex) return;
+
+  const rawSur = (hw && (hw.surah || hw.sura || hw.surahName || hw.surahNum || hw.surahNo || hw.surahText)) || '';
+  const info = decodeHomeworkSurah(rawSur);
+
+  const confirmed = (hw?.confirmed === true)
+    || (String(hw?.confirmed || '').trim() === '1')
+    || (String(hw?.confirmed || '').toLowerCase() === 'true')
+    || (String(hw?.confirmedFlag || '').trim() === '1')
+    || (String(hw?.confirmedFlag || '').toLowerCase() === 'true');
+
+  hwEditCtx = {
+    ref,
+    rowIndex,
+    orig: hw || {},
+    origConfirmed: confirmed,
+    origDate: String(hw?.date || hw?.datum || '').trim(),
+    origTeacher: String(hw?.teacherName || hw?.teacher || hw?.lehrer || '').trim(),
+    type: (info.kind === 'text') ? 'text' : 'quran'
+  };
+
+  const titleEl = document.getElementById('hw-edit-title');
+  if(titleEl){
+    titleEl.textContent = (state.lang==='de') ? 'Hausaufgabe bearbeiten' : 'تعديل الواجب';
+  }
+
+  const status = document.getElementById('hw-edit-status');
+  if(status) status.textContent = '';
+
+  // Fill fields
+  if(hwEditCtx.type === 'text'){
+    setHwEditType('text');
+    document.getElementById('hw-edit-text').value = info.freeText || '';
+  }else{
+    setHwEditType('quran');
+    const sur = (info.surahText || rawSur || '').replace(/^MEM\|/,'').trim();
+    document.getElementById('hw-edit-surah').value = sur;
+    document.getElementById('hw-edit-start').value = String(hw?.ayahStart || hw?.start || '').trim();
+    document.getElementById('hw-edit-end').value = String(hw?.ayahEnd || hw?.end || '').trim();
+
+    // autocomplete
+    try{
+      const inp = document.getElementById('hw-edit-surah');
+      const dd  = document.getElementById('hw-edit-surah-dd');
+      if(inp && dd && typeof bindSurahAutocomplete === 'function'){
+        bindSurahAutocomplete(inp, dd);
+      }
+    }catch(e){}
+  }
+
+  openModal('hw-edit-modal');
+}
+
+async function saveHomeworkEdit(){
+  if(!hwEditCtx || !hwEditCtx.ref || !hwEditCtx.rowIndex) return;
+
+  const status = document.getElementById('hw-edit-status');
+  const btn = document.getElementById('btn-hw-edit-save');
+  if(status) status.textContent = (state.lang==='de') ? 'Speichere…' : 'جارٍ الحفظ…';
+  if(btn) btn.disabled = true;
+
+  const type = (hwEditCtx.type === 'text') ? 'text' : 'quran';
+  const preserveConfirmed = !!hwEditCtx.origConfirmed;
+
+  // Preserve parentSeen if it was already acknowledged by parent
+  let preserveSeen = false;
+  try{
+    preserveSeen = (hwEditCtx.orig && (hwEditCtx.orig.parentSeen === true
+      || String(hwEditCtx.orig.parentSeen||'').trim() === '1'
+      || String(hwEditCtx.orig.parentSeen||'').toLowerCase() === 'true'));
+  }catch(e){ preserveSeen = false; }
+
+  let surah = '';
+  let start = '';
+  let end   = '';
+
+  if(type === 'text'){
+    const txt = (document.getElementById('hw-edit-text')?.value || '').trim();
+    if(!txt){
+      if(status) status.textContent = (state.lang==='de') ? 'Bitte Text eingeben' : 'اكتب نص الواجب';
+      if(btn) btn.disabled = false;
+      return;
+    }
+    surah = 'TEXT|' + txt;
+  }else{
+    surah = (document.getElementById('hw-edit-surah')?.value || '').trim();
+    start = (document.getElementById('hw-edit-start')?.value || '').trim();
+    end   = (document.getElementById('hw-edit-end')?.value || '').trim();
+    if(!surah || !start || !end){
+      if(status) status.textContent = (state.lang==='de') ? 'Bitte Sure + Versbereich ausfüllen' : 'أكمل السورة ونطاق الآيات';
+      if(btn) btn.disabled = false;
+      return;
+    }
+  }
+
+  // 1) delete old row
+  try{ await deleteHomeworkRowSilent(hwEditCtx.rowIndex); }catch(e){}
+
+  // 2) re-assign with updated content (store requestId so we can find the new row)
+  const dateLocal = hwEditCtx.origDate || getLocalDMYDate();
+  const teacherName = state.user || hwEditCtx.origTeacher || '';
+  const requestId = 'EDIT_' + String(hwEditCtx.rowIndex) + '_' + String(Date.now()) + '_' + Math.random().toString(16).slice(2);
+
+  try{
+    const res = await fetch(WEB_APP_URL, {
+      method:'POST',
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({
+        action:'assignHomework',
+        requestId,
+        studentRef: hwEditCtx.ref,
+        surah,
+        ayahStart: start,
+        ayahEnd: end,
+        teacherName,
+        date: dateLocal,
+        clientTs: Date.now()
+      })
+    }).then(r=>r.json());
+
+    if(res && res.ok){
+      // find new rowIndex (by requestId)
+      let newRowIndex = 0;
+      try{
+        const res2 = await fetch(WEB_APP_URL, {
+          method:'POST',
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({ action:'getStudentHomework', studentRef: hwEditCtx.ref })
+        }).then(r=>r.json());
+        const arr = (res2 && res2.ok) ? (res2.homework || []) : [];
+        const found = (arr||[]).find(x => String(x?.requestId||'').trim() === requestId);
+        newRowIndex = Number(found?.rowIndex || 0);
+      }catch(e){ newRowIndex = 0; }
+
+      // restore confirmation/seen status if possible
+      if(newRowIndex && preserveConfirmed){
+        try{ await toggleHomeworkConfirmedSilent(newRowIndex, true); }catch(e){}
+      }
+      if(newRowIndex && preserveSeen){
+        try{
+          await fetch(WEB_APP_URL, {
+            method:'POST',
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify({ action:'markHomeworkParentSeen', studentRef: hwEditCtx.ref, rowIndices: [newRowIndex] })
+          }).then(r=>r.json());
+        }catch(e){}
+      }
+
+      if(status) status.textContent = (state.lang==='de') ? 'Gespeichert.' : 'تم الحفظ.';
+      showToast(state.lang==='de' ? 'Gespeichert.' : 'تم الحفظ.');
+      closeModal('hw-edit-modal');
+
+      // refresh caches + views
+      try{ hwAllHomeworkCache?.delete(String(hwEditCtx.ref)); }catch(e){}
+      try{ hwAdmHomeworkCache?.delete(String(hwEditCtx.ref)); }catch(e){}
+
+      try{ if(typeof renderHomeworkAdminStudents === 'function') renderHomeworkAdminStudents(); }catch(e){}
+      try{
+        if(typeof ensureHomeworkAdminLoaded === 'function' && hwAdmExpandedRefs?.has(String(hwEditCtx.ref))){
+          ensureHomeworkAdminLoaded(String(hwEditCtx.ref));
+        }
+      }catch(e){}
+
+      try{ if(typeof renderAllHomeworkStudents === 'function') renderAllHomeworkStudents(); }catch(e){}
+      try{
+        if(typeof ensureAllHomeworkLoaded === 'function' && hwAllExpandedRefs?.has(String(hwEditCtx.ref))){
+          ensureAllHomeworkLoaded(String(hwEditCtx.ref));
+        }
+      }catch(e){}
+      try{ schedulePrimeAllHomeworkOptions(); }catch(e){}
+
+      try{
+        const sRef = state.currentDetailStudent?.referenz;
+        if(sRef && String(sRef) === String(hwEditCtx.ref) && typeof loadHomeworkHistory === 'function'){
+          loadHomeworkHistory(sRef);
+        }
+      }catch(e){}
+    }else{
+      if(status) status.textContent = (state.lang==='de') ? 'Fehler beim Speichern.' : 'خطأ أثناء الحفظ.';
+      showToast(state.lang==='de' ? 'Fehler' : 'خطأ');
+    }
+  }catch(e){
+    if(status) status.textContent = (state.lang==='de') ? 'Netzwerkfehler.' : 'خطأ بالشبكة.';
+    showToast(state.lang==='de' ? 'Netzwerkfehler' : 'خطأ بالشبكة');
+  }finally{
+    if(btn) btn.disabled = false;
+  }
 }
 
 
@@ -8155,7 +9080,16 @@ function playAssignedRange(){
   const audio = document.getElementById('lesson-audio');
   if(!audio) return;
 
-  const repeatCount = parseInt(document.getElementById('lesson-repeat-count')?.value || '1', 10) || 1;
+  const repeatSel = document.getElementById('floating-audio-repeat');
+  const repeatVal = (repeatSel ? String(repeatSel.value || '1') : '1').trim();
+  let repeatCount = (repeatVal === 'inf' || repeatVal === '∞') ? Infinity : (parseInt(repeatVal, 10) || 1);
+
+  // In memorization (Hausaufgaben) mode: keep looping through all assigned ayat
+  try{
+    const modal = document.getElementById('lesson-modal');
+    const vm = modal ? (modal.dataset.viewMode || '') : '';
+    if(vm === 'memorize') repeatCount = Infinity;
+  }catch(e){}
 
   rangePlayback.active = true;
   rangePlayback.repeatLeft = repeatCount;
@@ -8171,6 +9105,7 @@ function playAssignedRange(){
   });
 
   const playNext = () => {
+    if(rangePlayback && rangePlayback._suspendedByWbw) return;
     if(!rangePlayback.active) return;
 
     if(rangePlayback.idx >= rangePlayback.queue.length) {
@@ -8389,6 +9324,8 @@ function setLessonImmersiveMode(on, surahInfo=null){
 function showLessonImmersiveBar(autoHide=true){
   const modal = document.getElementById('lesson-modal');
   if(!modal || !modal.classList.contains('immersive')) return;
+  // Never show immersive top controls in memorization view
+  if((modal.dataset && (modal.dataset.viewMode||'')) === 'memorize') return;
   const bar = document.getElementById('lesson-immersive-bar');
   if(!bar) return;
 
@@ -8420,6 +9357,7 @@ function wireLessonImmersiveTaps(){
   document.addEventListener('click', (e)=>{
     const modal = document.getElementById('lesson-modal');
     if(!modal || !modal.classList.contains('visible') || !modal.classList.contains('immersive')) return;
+    if((modal.dataset && (modal.dataset.viewMode||'')) === 'memorize') return;
     if(e.target && e.target.closest && e.target.closest('#lesson-immersive-bar')) return;
     if(e.target && e.target.closest && e.target.closest('.quick-sheet')) return;
     showLessonImmersiveBar(true);
@@ -8684,6 +9622,30 @@ function renderLessonVerses({ surahNumber, surahLabel, start, end, verses, viewM
           setupFloatingAudio(surahNumber, v.ayah, v.ayah, verses);
         };
 
+        const __phon = __arabicToPhonetic(ayText);
+        let __trEl = null;
+
+        const btnPhon = document.createElement('button');
+        btnPhon.className = 'audio-btn sec';
+        btnPhon.textContent = 'Ph';
+        btnPhon.title = state.lang === 'de' ? 'Phonetik' : 'فونيتك';
+        btnPhon.onclick = () => {
+          if(!__trEl) return;
+          const isPh = (__trEl.dataset.mode === 'phon');
+          if(isPh){
+            __trEl.dataset.mode = 'de';
+            __trEl.classList.remove('phonetic');
+            __trEl.textContent = __trEl.dataset.de || '';
+            btnPhon.classList.remove('active');
+          }else{
+            __trEl.dataset.mode = 'phon';
+            __trEl.classList.add('phonetic');
+            __trEl.textContent = (__trEl.dataset.phon || __phon || '');
+            btnPhon.classList.add('active');
+          }
+        };
+
+
         const btnCopy = document.createElement('button');
         btnCopy.className = 'audio-btn sec';
         btnCopy.textContent = '⧉';
@@ -8697,6 +9659,7 @@ ${v.german || ''}`.trim();
         };
 
         actions.appendChild(btnPlay);
+        actions.appendChild(btnPhon);
         actions.appendChild(btnCopy);
 
         head.appendChild(title);
@@ -8704,11 +9667,16 @@ ${v.german || ''}`.trim();
 
         const ar = document.createElement('div');
         ar.className = 'ayah-card-ar';
-        ar.textContent = ayText;
+        const verseKey = `${surahNumber}:${v.ayah}`;
+        __renderClickableAyahWords(ar, verseKey, ayText);
 
         const tr = document.createElement('div');
         tr.className = 'ayah-card-tr';
-        tr.textContent = v.german || '';
+        tr.dataset.de = v.german || '';
+        tr.dataset.phon = __phon || '';
+        tr.dataset.mode = 'de';
+        tr.textContent = tr.dataset.de;
+        __trEl = tr;
 
         card.appendChild(head);
         card.appendChild(ar);
@@ -8810,11 +9778,22 @@ ${v.german || ''}`.trim();
   
   }
 // Student: immersive mushaf (hide header for more space)
-  const immersive = (String(state.role || '') === 'Student');
-  try{ setLessonImmersiveMode(immersive, surahInfo); }catch(e){}
+// IMPORTANT: In memorization (Hausaufgaben) view, we do NOT enable immersive top controls,
+// because they look like a "strange player" flashing at the top.
+  const isStudent = (String(state.role || '') === 'Student');
+  const immersive = isStudent && (String(viewMode||'') !== 'memorize');
+
+  try{
+    if(String(viewMode||'') === 'memorize'){
+      setLessonImmersiveMode(false, surahInfo);
+      hideLessonImmersiveBar(true);
+    }else{
+      setLessonImmersiveMode(immersive, surahInfo);
+    }
+  }catch(e){}
 
   // Focus search input (only in non-immersive mode)
-  if (searchInput && !immersive) searchInput.focus();
+  if (searchInput && !immersive && String(viewMode||'') !== 'memorize') searchInput.focus();
 
   // show modal + enable fab
   lessonFabState.hasLesson = true;
@@ -8822,6 +9801,7 @@ ${v.german || ''}`.trim();
   updateLessonFab();
 
   openModal('lesson-modal');
+  try{ __syncLessonMemoPlayer(true); }catch(e){}
   if(immersive) showLessonImmersiveBar(true);
 }
 
@@ -9185,6 +10165,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   state.loginMode = state.loginMode || 'auto';
   applyRemembered();
   try{ renderSavedProfiles(); }catch(e){}
+  try{ autoLoginIfRemembered(); }catch(e){}
 
   try{ wireIosExitConfirm(); }catch(e){}
   try{ ensureExitGuardState(); }catch(e){}
@@ -9258,7 +10239,7 @@ function loadData(opts = {}) {
       state.students = res.students; 
       state.attendance = res.attendance; 
       state.teachers = res.teachers || [];
-      try{ if(String(state.role||'')==='Admin'){ loadGroupMetaAll(); } }catch(e){}
+      try{ const r=String(state.role||''); if(r==='Admin' || r==='Lehrer' || r==='Teacher'){ loadGroupMetaAll(); } }catch(e){}
       state.lastId = res.lastId || 'N/A'; 
       state.studentInfos = res.studentInfos || []; 
       state.documents = res.documents || [];
@@ -11616,6 +12597,111 @@ function renderHomeworkAdminStudents(){
   if(hwAdminAssignMode){
     const isTextMode = (hwAdminQuickType === 'text');
 
+
+    // Row "Alle/الكل": write once, apply to all students' quick-assign inputs
+    const allRow = document.createElement('div');
+    allRow.className = 'hw-qa-row hw-qa-all' + (isTextMode ? ' hw-qa-text' : '');
+
+    const allName = (state.lang === 'de') ? 'Alle' : 'الكل';
+    const appliedMsg = (state.lang === 'de') ? 'Auf alle angewendet' : 'تم تطبيقه على الجميع';
+    const needFillMsg = (state.lang === 'de') ? 'Bitte Felder ausfüllen' : 'املأ الحقول أولاً';
+
+    if(isTextMode){
+      allRow.innerHTML = `
+        <div class="hw-qa-name">
+          <div class="bulk-name" style="color:var(--primary);">${allName}</div>
+        </div>
+
+        <input type="text" class="form-input hw-qa-free" placeholder="${state.lang==='de' ? 'Text für alle…' : 'نص للجميع…'}">
+
+        <button class="icon-btn hw-qa-send" type="button" aria-label="apply-all">
+          <i class="fa-solid fa-check"></i>
+        </button>
+
+        <div class="hw-qa-status text-sm text-sec"></div>
+      `;
+
+      const inpFreeAll = allRow.querySelector('.hw-qa-free');
+      const btnAll = allRow.querySelector('.hw-qa-send');
+      const statusEl = allRow.querySelector('.hw-qa-status');
+
+      const applyAll = ()=>{
+        const v = (inpFreeAll?.value || '').trim();
+        if(!v){
+          if(statusEl) statusEl.textContent = needFillMsg;
+          return;
+        }
+        // Apply to all visible student rows
+        box.querySelectorAll('.hw-qa-row:not(.hw-qa-all) .hw-qa-free').forEach(inp=>{
+          try{ inp.value = v; }catch(e){}
+        });
+        if(statusEl){
+          statusEl.textContent = appliedMsg;
+          setTimeout(()=>{ try{ statusEl.textContent=''; }catch(e){} }, 1200);
+        }
+      };
+
+      btnAll?.addEventListener('click', (ev)=>{ ev.stopPropagation(); applyAll(); });
+      inpFreeAll?.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter'){ e.preventDefault(); applyAll(); }
+      });
+
+    }else{
+      allRow.innerHTML = `
+        <div class="hw-qa-name">
+          <div class="bulk-name" style="color:var(--primary);">${allName}</div>
+        </div>
+
+        <div class="hw-qa-surah-wrap">
+          <input type="text" class="form-input hw-qa-surah" placeholder="${state.lang==='de'?'Sure':'السورة'}">
+          <div class="card hidden hw-qa-dd"></div>
+        </div>
+
+        <input type="number" class="form-input hw-qa-start" placeholder="${state.lang==='de'?'Von':'من'}">
+        <input type="number" class="form-input hw-qa-end" placeholder="${state.lang==='de'?'Bis':'إلى'}">
+
+        <button class="icon-btn hw-qa-send" type="button" aria-label="apply-all">
+          <i class="fa-solid fa-check"></i>
+        </button>
+
+        <div class="hw-qa-status text-sm text-sec"></div>
+      `;
+
+      const inpSurAll = allRow.querySelector('.hw-qa-surah');
+      const ddAll = allRow.querySelector('.hw-qa-dd');
+      const inpStAll = allRow.querySelector('.hw-qa-start');
+      const inpEnAll = allRow.querySelector('.hw-qa-end');
+      const btnAll = allRow.querySelector('.hw-qa-send');
+      const statusEl = allRow.querySelector('.hw-qa-status');
+
+      bindSurahAutocomplete(inpSurAll, ddAll);
+
+      const applyAll = ()=>{
+        const sur = (inpSurAll?.value || '').trim();
+        const st  = (inpStAll?.value || '').trim();
+        const en  = (inpEnAll?.value || '').trim();
+        if(!sur || !st || !en){
+          if(statusEl) statusEl.textContent = needFillMsg;
+          return;
+        }
+        box.querySelectorAll('.hw-qa-row:not(.hw-qa-all) .hw-qa-surah').forEach(inp=>{ try{ inp.value = sur; }catch(e){} });
+        box.querySelectorAll('.hw-qa-row:not(.hw-qa-all) .hw-qa-start').forEach(inp=>{ try{ inp.value = st; }catch(e){} });
+        box.querySelectorAll('.hw-qa-row:not(.hw-qa-all) .hw-qa-end').forEach(inp=>{ try{ inp.value = en; }catch(e){} });
+        if(statusEl){
+          statusEl.textContent = appliedMsg;
+          setTimeout(()=>{ try{ statusEl.textContent=''; }catch(e){} }, 1200);
+        }
+      };
+
+      btnAll?.addEventListener('click', (ev)=>{ ev.stopPropagation(); applyAll(); });
+      [inpSurAll, inpStAll, inpEnAll].forEach(el=>{
+        el?.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter'){ e.preventDefault(); applyAll(); }
+        });
+      });
+    }
+
+    box.appendChild(allRow);
     list.forEach(s=>{
       const ref = String(s.referenz || '').trim();
       const row = document.createElement('div');
@@ -12108,10 +13194,13 @@ function renderHomeworkAdminPanel(ref, homework){
       // Optional: allow confirming "done" for free text too
       if(rowIndex){
         right = `
-          <label class="hw-mini-toggle">
+          <div class="hw-mini-stack">
+            <label class="hw-mini-toggle">
             <input type="checkbox" ${confirmed ? 'checked' : ''} onchange="toggleHomeworkConfirmed(${rowIndex}, this.checked)">
             <span>${state.lang==='de' ? 'Erledigt' : 'تم'}</span>
           </label>
+            <button class=\"hw-mini-edit-btn\" type=\"button\" data-hw-edit title=\"${state.lang==='de'?'Bearbeiten':'تعديل'}\"><i class=\"fa-solid fa-pen\"></i><span>${state.lang==='de'?'Bearbeiten':'تعديل'}</span></button>
+          </div>
         `;
       }
     }else{
@@ -12127,10 +13216,13 @@ function renderHomeworkAdminPanel(ref, homework){
       // Quran tasmi' confirmation
       if(rowIndex){
         right = `
-          <label class="hw-mini-toggle">
+          <div class="hw-mini-stack">
+            <label class="hw-mini-toggle">
             <input type="checkbox" ${confirmed ? 'checked' : ''} onchange="toggleHomeworkConfirmed(${rowIndex}, this.checked)">
             <span>${state.lang==='de' ? 'Tasmiʿ bestätigt' : 'تأكيد التسميع'}</span>
           </label>
+            <button class=\"hw-mini-edit-btn\" type=\"button\" data-hw-edit title=\"${state.lang==='de'?'Bearbeiten':'تعديل'}\"><i class=\"fa-solid fa-pen\"></i><span>${state.lang==='de'?'Bearbeiten':'تعديل'}</span></button>
+          </div>
         `;
       }else if(confirmed){
         right = `<span class="pill" style="font-size:0.78rem; padding:2px 8px;">${state.lang==='de'?'Bestätigt':'مؤكد'}</span>`;
@@ -12147,7 +13239,13 @@ function renderHomeworkAdminPanel(ref, homework){
       </div>
       <div class="hw-all-actions">${right}</div>
     `;
-    panel.appendChild(el);
+        const editBtn = el.querySelector('button[data-hw-edit]');
+    editBtn?.addEventListener('click', (ev)=>{
+      ev.stopPropagation();
+      if(!rowIndex) return;
+      openHomeworkEditModal(String(ref), h, rowIndex);
+    });
+panel.appendChild(el);
   });
 }
 
@@ -12918,35 +14016,38 @@ function renderAllHomeworkPanel(ref, homework){
         <div class="hw-all-meta text-sm text-sec" style="margin-top:1px;">${date}${teacher}</div>
         ${body ? `<div class="hw-all-body" style="margin-top:3px; white-space:pre-wrap;">${body}</div>` : ``}
       </div>
-      <div class="hw-all-actions">
+      <div class="hw-all-actions" style="flex-direction:column; align-items:flex-end; gap:4px;">
         <label class="hw-mini-toggle">
           <input type="checkbox" ${confirmed ? 'checked' : ''} ${rowIndex ? '' : 'disabled'} />
           <span>${escapeHtml(confLabel)}</span>
         </label>
-        <button class="icon-btn-mini danger" type="button" data-row="${rowIndex}" title="${state.lang==='de'?'Löschen':'حذف'}" ${rowIndex ? '' : 'disabled'}><i class="fa-solid fa-trash"></i></button>
+        <button class="icon-btn-mini" type="button" data-hw-edit ${rowIndex ? '' : 'disabled'} title="${state.lang==='de'?'Bearbeiten':'تعديل'}">
+          <i class="fa-solid fa-pen"></i>
+        </button>
       </div>
     `;
 
-    const chk = el.querySelector('input[type="checkbox"]');
-    chk?.addEventListener('change', ()=>{
-      if(!rowIndex) return;
-      toggleHomeworkConfirmedSilent(rowIndex, chk.checked).then(ok=>{
-        if(ok){
-          hwAllHomeworkCache.delete(String(ref));
-          ensureAllHomeworkLoaded(String(ref));
-          schedulePrimeAllHomeworkOptions();
-        }
-      });
-    });
+        const chk = el.querySelector('input[type="checkbox"]');
+        chk?.addEventListener('change', ()=>{
+          if(!rowIndex) return;
+          toggleHomeworkConfirmedSilent(rowIndex, chk.checked).then(ok=>{
+            if(ok){
+              hwAllHomeworkCache.delete(String(ref));
+              ensureAllHomeworkLoaded(String(ref));
+              schedulePrimeAllHomeworkOptions();
+            }
+          });
+        });
 
-    const delBtn = el.querySelector('button.icon-btn-mini.danger');
-    delBtn?.addEventListener('click', (ev)=>{
-      ev.stopPropagation();
-      if(!rowIndex) return;
-      deleteOneHomeworkEntryForStudent(String(ref), rowIndex);
-    });
+        const editBtn = el.querySelector('button[data-hw-edit]');
+        editBtn?.addEventListener('click', (ev)=>{
+          ev.stopPropagation();
+          if(!rowIndex) return;
+          openHomeworkEditModal(String(ref), h, rowIndex);
+        });
 
-    panel.appendChild(el);
+
+panel.appendChild(el);
   });
 }
 
@@ -13643,6 +14744,7 @@ function hideIosExitConfirm(){
   if(!el) return;
   navState.exitUiOpen = false;
   el.classList.remove('visible');
+  try{ if(id==='lesson-modal') __syncLessonMemoPlayer(false); }catch(e){}
   el.setAttribute('aria-hidden', 'true');
   setTimeout(()=> el.classList.add('hidden'), 220);
 }
@@ -13732,6 +14834,7 @@ function hideModalOnly(id, opts={}){
   const el = document.getElementById(id);
   if(!el) return;
   el.classList.remove('visible');
+  try{ if(id==='lesson-modal') __syncLessonMemoPlayer(false); }catch(e){}
 
   // Keep modal stack clean
   try { navState.modalStack = (navState.modalStack || []).filter(x => x !== id); } catch(e) {}
@@ -13831,12 +14934,18 @@ function dismissAllModalsNoHistory(){
     visible.forEach(el => {
       const id = el.id || '';
       el.classList.remove('visible');
+  try{ if(id==='lesson-modal') __syncLessonMemoPlayer(false); }catch(e){}
       try { navState.modalStack = (navState.modalStack || []).filter(x => x !== id); } catch(e) {}
       // clean up special modal resources
       if(id === 'lesson-modal'){
-        try{ stopRangePlayback(); }catch(e){}
-        try{ hideFloatingAudio(); }catch(e){}
-        try{ clearLessonFab(); }catch(e){}
+        const vm = (() => { try{ const m = document.getElementById('lesson-modal'); return m ? (m.dataset.viewMode || '') : ''; }catch(e){ return ''; } })();
+        if(vm === 'memorize'){
+          try{ __syncLessonMemoPlayer(false); }catch(e){}
+        }else{
+          try{ stopRangePlayback(); }catch(e){}
+          try{ hideFloatingAudio(); }catch(e){}
+          try{ clearLessonFab(); }catch(e){}
+        }
       }
     });
   }catch(e){}
@@ -13960,10 +15069,22 @@ function closeModal(id, opts={}) {
   try { navState.modalStack = (navState.modalStack || []).filter(x => x !== id); } catch(e) {}
 
   if(id === 'lesson-modal'){
-    try{ stopRangePlayback(); }catch(e){}
-    try{ hideFloatingAudio(); }catch(e){}
-    clearLessonFab();
-    try{ hideLessonImmersiveBar(true); }catch(e){}
+    const vm = (() => {
+      try{
+        const m = document.getElementById('lesson-modal');
+        return m ? (m.dataset.viewMode || '') : '';
+      }catch(e){ return ''; }
+    })();
+
+    // In memorization (Hausaufgaben) mode: do NOT stop the audio when closing the overlay
+    if(vm === 'memorize'){
+      try{ __syncLessonMemoPlayer(false); }catch(e){}
+    }else{
+      try{ stopRangePlayback(); }catch(e){}
+      try{ hideFloatingAudio(); }catch(e){}
+      clearLessonFab();
+      try{ hideLessonImmersiveBar(true); }catch(e){}
+    }
   }
 
   // If user closed the modal manually (X/button), keep history in sync by going back one step.
@@ -14160,31 +15281,105 @@ function openInGhostWindow(url) {
 }
 
 function renderUsersList() {
-  const container = document.getElementById('users-list-container'); 
+  const container = document.getElementById('users-list-container');
   if (!container) return;
-  
+
   container.innerHTML = '';
-  state.allUsers.forEach(user => {
-    const userEl = document.createElement('div'); 
-    userEl.className = 'card';
-    
-    userEl.innerHTML = `
-      <div style="flex:1;">
-        <div class="font-bold">${user.userName}</div>
-        <div class="text-sm text-sec">${user.role} - PIN: ****</div>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <button class="user-action-btn" onclick='openEditUser(${JSON.stringify(user)})'>
-          <i class="fa-solid fa-pen-to-square"></i>
-        </button>
-        <button class="user-action-btn" style="color:var(--danger);" onclick="deleteUser(${user.rowIndex})">
-          <i class="fa-solid fa-trash"></i>
-        </button>
-      </div>
-    `;
-    
-    container.appendChild(userEl);
+
+  const byRole = {};
+  (state.allUsers || []).forEach(u => {
+    const role = (u && u.role) ? String(u.role) : '—';
+    (byRole[role] ||= []).push(u);
   });
+
+  const preferredOrder = ['Schüler', 'Lehrer', 'Admin', 'Eltern'];
+  const roles = [
+    ...preferredOrder.filter(r => byRole[r]?.length),
+    ...Object.keys(byRole).filter(r => !preferredOrder.includes(r)).sort((a,b)=>a.localeCompare(b))
+  ];
+
+  // default: open first group on first render
+  if (!state.adminUserGroupsOpen) {
+    state.adminUserGroupsOpen = {};
+    if (roles[0]) state.adminUserGroupsOpen[roles[0]] = true;
+  }
+
+  roles.forEach(role => {
+    const users = byRole[role] || [];
+    const groupCard = document.createElement('div');
+    groupCard.className = 'card user-group-card';
+
+    const bodyId = 'users-group-body-' + safeGroupKey(role);
+    const isOpen = !!state.adminUserGroupsOpen?.[role];
+
+    groupCard.innerHTML = `
+      <div class="user-group-header" data-role="${encodeURIComponent(role)}" data-body="${bodyId}" onclick="toggleUserGroup(this)">
+        <div class="user-group-title">
+          <div class="font-bold">${getUserRoleGroupLabel(role)}</div>
+          <div class="text-sm text-sec">${users.length} Benutzer</div>
+        </div>
+        <i class="fa-solid fa-chevron-down user-group-chevron ${isOpen ? 'open' : ''}"></i>
+      </div>
+      <div class="user-group-body ${isOpen ? '' : 'hidden'}" id="${bodyId}"></div>
+    `;
+
+    container.appendChild(groupCard);
+
+    const body = groupCard.querySelector('#' + CSS.escape(bodyId));
+    users.forEach(user => {
+      const row = document.createElement('div');
+      row.className = 'user-row';
+      row.innerHTML = `
+        <div style="flex:1; min-width:0;">
+          <div class="font-bold" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${user.userName || ''}</div>
+          <div class="text-sm text-sec">${user.role || ''} - PIN: ****</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-shrink:0;">
+          <button class="user-action-btn" title="${t('edit') || 'Bearbeiten'}" onclick='openEditUser(${JSON.stringify(user)})'>
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+          <button class="user-action-btn" title="${t('delete') || 'Löschen'}" style="color:var(--danger);" onclick="deleteUser(${user.rowIndex})">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      `;
+      body.appendChild(row);
+    });
+  });
+}
+
+function toggleUserGroup(el) {
+  if (!el) return;
+  const role = decodeURIComponent(el.dataset.role || '');
+  const bodyId = el.dataset.body;
+  const body = document.getElementById(bodyId);
+  if (!body) return;
+
+  state.adminUserGroupsOpen ||= {};
+  const next = !(state.adminUserGroupsOpen[role]);
+  state.adminUserGroupsOpen[role] = next;
+
+  body.classList.toggle('hidden', !next);
+  const chevron = el.querySelector('.user-group-chevron');
+  if (chevron) chevron.classList.toggle('open', next);
+}
+
+function safeGroupKey(role) {
+  try {
+    return btoa(unescape(encodeURIComponent(role))).replace(/=+/g, '').replace(/[^a-zA-Z0-9]/g,'_');
+  } catch (e) {
+    return String(role || '').replace(/[^a-zA-Z0-9]+/g, '_');
+  }
+}
+
+function getUserRoleGroupLabel(role) {
+  const map = {
+    'Schüler': 'Schüler / طلاب',
+    'Lehrer': 'Lehrer / مدرس',
+    'Admin': 'Admin / مُسير',
+    'Eltern': 'Eltern / وليّ أمر'
+  };
+  return map[role] || role;
 }
 
 
@@ -14303,11 +15498,21 @@ function renderGroupsCards(){
 
     const dayLabel = (state.lang === 'ar') ? (DAY_DE_TO_AR[it.day] || it.day) : it.day;
 
+    const meta = getGroupMeta(it.day, it.group) || {};
+    const teacherName = String(meta.teacher || '').trim() || '—';
+    const tFrom = normalizeTimeHHMM_(meta.timeFrom);
+    const tTo = normalizeTimeHHMM_(meta.timeTo);
+    const timeStr = (tFrom || tTo) ? `${tFrom || ''}${(tFrom && tTo) ? '–' : ''}${tTo || ''}` : '—';
+
     card.innerHTML = `
       <div class="group-card-title">${it.group} • ${dayLabel}</div>
+      <div class="group-card-extra">
+        <div class="line"><i class="fa-solid fa-chalkboard-user"></i> ${escapeHtml(teacherName)}</div>
+        <div class="line"><i class="fa-solid fa-clock"></i> ${escapeHtml(timeStr)}</div>
+      </div>
       <div class="group-card-meta">
         <span class="badge-pill"><i class="fa-solid fa-users"></i> ${it.count}/${cap}</span>
-        <span class="badge-pill"><i class="fa-solid ${isFull ? 'fa-circle-xmark' : 'fa-circle-check'}"></i> ${isFull ? (state.lang==='de'?'Voll':'ممتلئ') : (state.lang==='de'?'Frei':'فيه أماكن')}</span>
+        <span class="badge-pill"><i class="fa-solid ${isFull ? 'fa-xmark' : 'fa-check'}"></i> ${isFull ? (state.lang==='de'?'Voll':'ممتلئ') : (state.lang==='de'?'Frei':'فيه أماكن')}</span>
       </div>
     `;
 
@@ -14871,7 +16076,7 @@ function loadMessages() {
         if(maxRow) setMsgAfterRow(maxRow);
       }catch(e){}
 // Simple "push-like" browser notification on NEW unread message
-      const unread = state.messages.filter(m => m.status === 'neu');
+      const unread = state.messages.filter(m => isUnreadInbound(m));
       const latest = unread.reduce((a,b)=>{
         const ai = parseInt(a?.rowIndex ?? -1,10);
         const bi = parseInt(b?.rowIndex ?? -1,10);
@@ -14902,8 +16107,9 @@ function loadMessages() {
 
 function ensureCommUi(){
   if(!state.commUi){
-    state.commUi = { filter: 'all', search: '', open: null, composeOpen: false, selStudents: new Set() };
+    state.commUi = { box: 'inbox', filter: 'all', search: '', open: null, composeOpen: false, selStudents: new Set() };
   }
+  if(!state.commUi.box) state.commUi.box = 'inbox';
   // normalize legacy shapes
   if(!(state.commUi.selStudents instanceof Set)){
     try{ state.commUi.selStudents = new Set(state.commUi.selStudents || []); }catch(e){ state.commUi.selStudents = new Set(); }
@@ -14914,6 +16120,8 @@ function commStrings(){
   const de = state.lang === 'de';
   return {
     title: de ? 'Nachrichten' : 'الرسائل',
+    inbox: de ? 'Eingang' : 'الوارد',
+    sent: de ? 'Gesendet' : 'المرسلة',
     all: de ? 'Alle' : 'الكل',
     unread: de ? 'Ungelesen' : 'غير مقروء',
     search: de ? 'Suchen…' : 'بحث…',
@@ -14936,11 +16144,23 @@ function syncCommHeaderText(){
   if(search) search.placeholder = S.search;
 
   // chips + unread count
-  const unreadCount = (state.messages || []).filter(m => m && m.status === 'neu').length;
+  const unreadCount = (state.messages || []).filter(m => m && isUnreadInbound(m)).length;
   const allBtn = document.getElementById('msg-chip-all');
   const unBtn = document.getElementById('msg-chip-unread');
   if(allBtn) allBtn.textContent = S.all;
   if(unBtn) unBtn.textContent = unreadCount ? `${S.unread} (${unreadCount})` : S.unread;
+
+  const inboxBtn = document.getElementById('msg-chip-inbox');
+  const sentBtn  = document.getElementById('msg-chip-sent');
+  if(inboxBtn) inboxBtn.textContent = S.inbox;
+  if(sentBtn)  sentBtn.textContent  = S.sent;
+
+  const boxMode = state.commUi.box || 'inbox';
+  if(inboxBtn) inboxBtn.classList.toggle('active', boxMode !== 'sent');
+  if(sentBtn)  sentBtn.classList.toggle('active', boxMode === 'sent');
+
+  const filterWrap = document.getElementById('msg-filter-chips');
+  if(filterWrap) filterWrap.classList.toggle('hidden', boxMode === 'sent');
 
   const filter = state.commUi.filter || 'all';
   if(allBtn) allBtn.classList.toggle('active', filter !== 'unread');
@@ -14978,6 +16198,18 @@ function setMsgFilter(mode){
   ensureCommUi();
   state.commUi.filter = (mode === 'unread') ? 'unread' : 'all';
   state.commUi.open = null;
+  syncCommHeaderText();
+  renderMessages();
+}
+
+function setMsgBox(mode){
+  ensureCommUi();
+  const next = (mode === 'sent') ? 'sent' : 'inbox';
+  if(state.commUi.box === next) return;
+  state.commUi.box = next;
+  state.commUi.open = null;
+  // Sent box does not have unread filter
+  if(next === 'sent') state.commUi.filter = 'all';
   syncCommHeaderText();
   renderMessages();
 }
@@ -15042,7 +16274,7 @@ function toggleMsgOpen(rowIndex){
 
   if(state.commUi.open){
     const msg = (state.messages || []).find(m => String(m.rowIndex) === state.commUi.open);
-    if(msg && msg.status === 'neu'){
+    if(msg && msg.status === 'neu' && isInboundToMe(msg) && !isFromMeMessage(msg)){
       markRead(msg.rowIndex);
       return;
     }
@@ -15082,6 +16314,28 @@ function copyMsg(rowIndex){
   }
 }
 
+function resolveStudentNameByRef(ref){
+  const r = String(ref || '').trim();
+  if(!r) return '';
+  const list = Array.isArray(state.students) ? state.students : [];
+  const s = list.find(x => String(x?.referenz ?? x?.studentRef ?? x?.ref ?? '').trim() === r);
+  return s ? String(s.fullName || '').trim() : '';
+}
+
+function msgRecipientDisplay(msg){
+  const de = (state.lang === 'de');
+  const type = String(msg?.recipientType || '').trim();
+  const nameRaw = String(msg?.recipientName || '').trim();
+
+  if(type === 'Admin') return de ? 'Admin' : 'الإدارة';
+  if(type === 'Lehrer') return nameRaw || (de ? 'Lehrer' : 'المعلمون');
+  if(type === 'Student'){
+    const friendly = resolveStudentNameByRef(nameRaw);
+    return friendly || nameRaw || (de ? 'Schüler' : 'طالب');
+  }
+  return nameRaw || (de ? 'Empfänger' : 'مستلم');
+}
+
 function renderMessages() {
   ensureCommUi();
   syncCommHeaderText();
@@ -15099,21 +16353,34 @@ function renderMessages() {
     return 0;
   });
 
+  const boxMode = state.commUi.box || 'inbox';
   const filter = state.commUi.filter || 'all';
   const q = (state.commUi.search || '').trim().toLowerCase();
 
-  const msgs = raw.filter(m=>{
+  let msgs = raw.filter(m=>{
     if(!m) return false;
-    if(filter === 'unread' && m.status !== 'neu') return false;
+    if(boxMode === 'sent') return isFromMeMessage(m);
+    // inbox
+    return isInboundToMe(m) && !isFromMeMessage(m);
+  });
+
+  msgs = msgs.filter(m=>{
+    if(boxMode !== 'sent'){
+      if(filter === 'unread' && !isUnreadInbound(m)) return false;
+    }
     if(q){
-      const hay = `${m.senderName||''} ${m.timestamp||''} ${m.messageText||''}`.toLowerCase();
+      const hay = `${m.senderName||''} ${m.recipientType||''} ${m.recipientName||''} ${m.timestamp||''} ${m.messageText||''}`.toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;
   });
 
   if(msgs.length === 0){
-    box.innerHTML = `<div class="msg-empty">${escapeHtml(commStrings().empty)}</div>`;
+    const S = commStrings();
+    const empty = (boxMode === 'sent')
+      ? ((state.lang === 'de') ? 'Keine gesendeten Nachrichten.' : 'لا توجد رسائل مرسلة.')
+      : S.empty;
+    box.innerHTML = `<div class="msg-empty">${escapeHtml(empty)}</div>`;
     return;
   }
 
@@ -15123,22 +16390,26 @@ function renderMessages() {
   let html = '';
   msgs.forEach(msg=>{
     const id = String(msg.rowIndex || '');
-    const isUnread = msg.status === 'neu';
     const isOpen = openId && openId === id;
 
-    const sender = escapeHtml(msg.senderName || (de ? 'Unbekannt' : 'غير معروف'));
-    const time = escapeHtml(msg.timestamp || '');
     const rawText = String(msg.messageText || '');
-
     const snippet = rawText.replace(/\s+/g,' ').trim().slice(0, 140);
     const snippetHtml = escapeHtml(snippet);
+
+    const isUnread = (boxMode !== 'sent' && isUnreadInbound(msg));
+
+    const title = (boxMode === 'sent')
+      ? `${de ? 'An: ' : 'إلى: '}${escapeHtml(msgRecipientDisplay(msg))}`
+      : escapeHtml(msg.senderName || (de ? 'Unbekannt' : 'غير معروف'));
+
+    const time = escapeHtml(msg.timestamp || '');
 
     html += `
       <div class="msg-item ${isUnread ? 'unread' : ''}">
         <div class="msg-top" onclick="toggleMsgOpen('${id}')">
           <div class="msg-left">
             <div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px;">
-              <div class="msg-sender">${sender}</div>
+              <div class="msg-sender">${title}</div>
               <div class="msg-time">${time}</div>
             </div>
             <div class="msg-snippet">${snippetHtml || '&nbsp;'}</div>
@@ -15181,7 +16452,7 @@ function markRead(idx) {
 
 function updateMsgBadge() {
   const msgs = Array.isArray(state.messages) ? state.messages : [];
-  const c = msgs.filter(m => m && m.status === 'neu').length;
+  const c = msgs.filter(m => m && isUnreadInbound(m)).length;
 
   const setBadge = (el) => {
     if(!el) return;
@@ -15197,6 +16468,7 @@ function updateMsgBadge() {
   setBadge(document.getElementById('badge-msg-nav-stu'));   // student bottom nav (kept hidden)
   setBadge(document.getElementById('badge-msg-hdr-stu'));   // student header icon
 }
+
 
 
 function populateTeacherSelect() {
@@ -15378,25 +16650,57 @@ function isCommTabVisible(){
   return !!el && !el.classList.contains('hidden');
 }
 
+function normalizePersonKey(v){
+  // normalize names like "Soulayman (Lehrer)" -> "soulayman"
+  let s = String(v || '').trim();
+  s = s.replace(/\s+/g,' ');
+  // remove trailing role suffix in parentheses
+  s = s.replace(/\s*\([^)]*\)\s*$/,'');
+  // common separators
+  s = s.replace(/\s*[-–—]\s*(admin|lehrer|student|schüler|eltern)\s*$/i,'');
+  return s.trim().toLowerCase();
+}
+
 function isFromMeMessage(m){
-  const myUser = String(state.user || '').trim();
+  const myUser = normalizePersonKey(state.user || '');
   const myRef  = String(state.studentData?.referenz || '').trim();
-  const sender = String(m?.senderName || '').trim();
-  return (!!myUser && sender === myUser) || (!!myRef && sender === myRef);
+  const senderRaw = String(m?.senderName || '').trim();
+  const sender = normalizePersonKey(senderRaw);
+
+  // direct name match (normalized)
+  if(myUser && sender && sender === myUser) return true;
+
+  // fallback: sometimes senderName contains role or extra info
+  if(myUser && senderRaw && normalizePersonKey(senderRaw).startsWith(myUser)) return true;
+
+  // studentRef match (some sheets store sender as ref)
+  if(myRef && senderRaw && String(senderRaw).trim() === myRef) return true;
+
+  return false;
 }
 
 function isInboundToMe(m){
   const role = String(state.role || '').toLowerCase();
   if(role === 'admin') return String(m?.recipientType||'') === 'Admin';
-  if(role === 'lehrer') return String(m?.recipientType||'') === 'Lehrer' && String(m?.recipientName||'').trim() === String(state.user||'').trim();
+  if(role === 'lehrer' || role === 'teacher'){
+    const recType = String(m?.recipientType||'');
+    if(recType !== 'Lehrer') return false;
+    const to = normalizePersonKey(m?.recipientName || '');
+    const me = normalizePersonKey(state.user || '');
+    return !!me && !!to && to === me;
+  }
   if(role === 'student'){
     const myRef = String(state.studentData?.referenz || '').trim();
     const to = String(m?.recipientName||'').trim();
     return String(m?.recipientType||'') === 'Student' && (
-      (myRef && to === myRef) || (!myRef && to === String(state.user||'').trim())
+      (myRef && to === myRef) || (!myRef && normalizePersonKey(to) === normalizePersonKey(state.user||''))
     );
   }
   return false;
+}
+
+function isUnreadInbound(m){
+  return !!m && String(m.status||'') === 'neu' && isInboundToMe(m) && !isFromMeMessage(m);
 }
 
 // Small beep without external audio files
