@@ -1,85 +1,81 @@
-// Simple service worker for Qur'an School PWA
-// غيّر رقم النسخة هنا فقط عندما تريد مسح الكاش القديم بالكامل
-const CACHE_VERSION = 'v4';
-const CACHE_NAME = `quran-school-cache-${CACHE_VERSION}`;
+/* sw.js
+   كل ما تغيّر CACHE_VERSION أو CACHE_NAME → يتم حذف كل الكاشات القديمة تلقائياً في activate
+*/
 
-const URLS_TO_CACHE = [
-  './',
-  './index.html',
-  './manifest.webmanifest'
-  // إذا أضفت ملفات أخرى (CSS/JS/صور محلية) أضفها هنا
+const CACHE_VERSION = "v1.0.2"; // غيّرها عند كل تحديث
+const CACHE_NAME = `masjid-app-cache-${CACHE_VERSION}`;
+
+// عدّل الملفات اللي تريدها تتخزن Offline
+// (لو مشروعك ملف HTML واحد فقط: خلي "/" واسم ملفك)
+const PRECACHE_URLS = [
+  "/",                       // الصفحة الرئيسية
+  "./index.html",            // أو اسم ملفك الحقيقي
+  "./sw.js",                 // اختياري
+  "./manifest.webmanifest",  // إن وجد
+  "./favicon.ico",           // إن وجد
 ];
 
-self.addEventListener('install', (event) => {
+// 1) Install: خزّن الملفات الأساسية
+self.addEventListener("install", (event) => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
-      await cache.addAll(URLS_TO_CACHE);
-
-      // يجعل الـ SW الجديد جاهز للتفعيل مباشرة
-      await self.skipWaiting();
+      await cache.addAll(PRECACHE_URLS);
+      await self.skipWaiting(); // فعّل النسخة الجديدة بسرعة
     })()
   );
 });
 
-self.addEventListener('activate', (event) => {
+// 2) Activate: احذف أي كاش قديم (أي اسم لا يطابق CACHE_NAME الحالي)
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
-      // امسح أي كاش قديم إذا تغيّر اسم/نسخة الكاش
       const keys = await caches.keys();
       await Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
+        keys.map((key) => (key !== CACHE_NAME ? caches.delete(key) : Promise.resolve()))
       );
-
-      // خذ التحكم في الصفحات فوراً
-      await self.clients.claim();
+      await self.clients.claim(); // خلّ العملاء يستخدموا SW الجديد فوراً
     })()
   );
 });
 
-self.addEventListener('fetch', (event) => {
+// 3) Fetch: كاش للطلبات GET لنفس الدومين فقط (حتى لا نخزّن API Apps Script)
+self.addEventListener("fetch", (event) => {
   const req = event.request;
 
-  // نتعامل فقط مع GET
-  if (req.method !== 'GET') return;
+  // لا نتعامل إلا مع GET
+  if (req.method !== "GET") return;
 
   const url = new URL(req.url);
 
-  // 1) للـ index.html: Network First
-  //    إذا فيه تحديث على GitHub Pages بيجيب الجديد ويحدّث الكاش
-  //    وإذا ما فيه نت يرجع للكاش القديم
-  const isIndex =
-    url.origin === self.location.origin &&
-    (url.pathname.endsWith('/') || url.pathname.endsWith('/index.html'));
+  // تجاهل طلبات خارج نفس الأصل (مثل Google Apps Script WebApp) → خليها Network فقط
+  if (url.origin !== self.location.origin) return;
 
-  if (isIndex) {
+  // للـ navigation (فتح الصفحة): Network-first ثم fallback للكاش
+  if (req.mode === "navigate") {
     event.respondWith(
       (async () => {
-        const cache = await caches.open(CACHE_NAME);
         try {
-          const fresh = await fetch(req, { cache: 'no-store' });
-          // حدّث الكاش دائماً بأحدث نسخة
+          const fresh = await fetch(req);
+          const cache = await caches.open(CACHE_NAME);
           cache.put(req, fresh.clone());
           return fresh;
-        } catch (err) {
-          const cached = await cache.match(req);
-          return cached || Response.error();
+        } catch (e) {
+          const cached = await caches.match(req);
+          return cached || caches.match("./index.html") || Response.error();
         }
       })()
     );
     return;
   }
 
-  // 2) باقي الملفات: Cache First (سريع) مع fallback للنت
+  // لباقي ملفات الستاتيك: Cache-first ثم Network وتخزين
   event.respondWith(
     (async () => {
       const cached = await caches.match(req);
       if (cached) return cached;
 
       const res = await fetch(req);
-      // خزّن نسخة في الكاش (اختياري لكن مفيد)
       const cache = await caches.open(CACHE_NAME);
       cache.put(req, res.clone());
       return res;
