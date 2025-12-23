@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" sizes="128x128"
         href="https://drive.google.com/thumbnail?id=1T7-S0REmEvmSJbsBxajYQcSb2laWC7Jd&sz=w128-h128">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Alexandria:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
 <style>
 /* iOS MODERN THEME & DARK MODE SUPPORT */
@@ -3663,6 +3663,301 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
 
 /* Hide legacy qc audio bar (replaced by site floating player) */
 #koranAudioBar, #qcAudioSheetBackdrop, #koranAudioAdvanced{ display:none !important; }
+
+
+/* =======================================================================
+   GOOGLE MODERN (Material-like) THEME OVERRIDES — keeps Apps Script/JS intact
+   v124 — visual only
+   ======================================================================= */
+
+:root{
+  /* Core surfaces (Google apps-like) */
+  --bg: #f6f8fc;
+  --surface: #ffffff;
+  --surface-2: #f1f3f4;
+  --surface-3: #e8f0fe;
+
+  /* Brand / accents */
+  --primary: #1a73e8;
+  --primary-dark: #174ea6;
+  --primary-container: rgba(26, 115, 232, 0.14);
+
+  /* Text / system colors */
+  --text: #202124;
+  --text-sec: #5f6368;
+  --danger: #d93025;
+  --warning: #f9ab00;
+  --success: #188038;
+
+  /* Shape & elevation */
+  --border: rgba(60, 64, 67, 0.16);
+  --radius: 12px;
+  --radius-lg: 18px;
+  --shadow-1: 0 1px 2px rgba(60, 64, 67, 0.18), 0 1px 3px rgba(60, 64, 67, 0.12);
+  --shadow-2: 0 6px 18px rgba(60, 64, 67, 0.18), 0 1px 3px rgba(60, 64, 67, 0.10);
+
+  /* Disable iOS-glass variables (keep names to avoid breaking legacy CSS) */
+  --glass: var(--surface);
+  --glass-2: var(--surface);
+}
+
+.dark-mode{
+  --bg: #202124;
+  --surface: #2b2c2f;
+  --surface-2: #303134;
+  --surface-3: rgba(138, 180, 248, 0.10);
+
+  --primary: #8ab4f8;
+  --primary-dark: #a8c7ff;
+  --primary-container: rgba(138, 180, 248, 0.20);
+
+  --text: #e8eaed;
+  --text-sec: #9aa0a6;
+
+  --danger: #f28b82;
+  --warning: #fdd663;
+  --success: #81c995;
+
+  --border: rgba(232, 234, 237, 0.14);
+
+  --glass: var(--surface);
+  --glass-2: var(--surface);
+}
+
+/* Global typography & background */
+body{
+  font-family: "Roboto", "Alexandria", system-ui, -apple-system, Segoe UI, Arial, sans-serif !important;
+  background: var(--bg) !important;
+}
+
+/* App header (top app bar) */
+header, header.app-header{
+  background: var(--surface) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: none !important;
+}
+
+/* Logo */
+.logo-img{
+  border-radius: 12px !important;
+}
+
+/* Icon buttons (Google-style) */
+.icon-btn{
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-sec) !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 999px !important;
+  transition: background-color .12s ease, transform .06s ease;
+}
+.icon-btn:hover{ background: rgba(60,64,67,0.08) !important; }
+.dark-mode .icon-btn:hover{ background: rgba(232,234,237,0.08) !important; }
+.icon-btn:active{
+  transform: scale(0.98);
+  background: rgba(60,64,67,0.14) !important;
+}
+.dark-mode .icon-btn:active{ background: rgba(232,234,237,0.14) !important; }
+
+/* Primary/secondary buttons */
+.btn{
+  background: var(--primary) !important;
+  color: #fff !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-1) !important;
+  font-weight: 600 !important;
+}
+.btn:active{ opacity: .92; }
+.btn.btn-sec, .btn-sec{
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  border: 1px solid var(--border) !important;
+}
+.btn.btn-sec:active, .btn-sec:active{ opacity: .90; }
+
+/* Cards */
+.card, .surah-card, .mushaf-card, .msg-card, .progress-box, .login-box, .modal-content{
+  border-radius: var(--radius-lg) !important;
+}
+.card, .surah-card, .mushaf-card, .msg-card, .progress-box, .login-box{
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-1) !important;
+}
+.note-item{
+  background: var(--surface-2) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+}
+
+/* Inputs (Material-like) */
+.search-bar, .form-input, .form-select, .form-textarea, .quran-search-input, .login-box input, .login-text{
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+}
+.search-bar{
+  border-radius: 999px !important;
+  padding: 12px 14px !important;
+}
+.search-bar:focus, .form-input:focus, .form-select:focus, .form-textarea:focus, .quran-search-input:focus, .login-box input:focus, .login-text:focus{
+  outline: none !important;
+  border-color: rgba(26,115,232,0.55) !important;
+  box-shadow: 0 0 0 3px var(--primary-container) !important;
+}
+
+/* Chips */
+.chip{
+  background: var(--surface-2) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 999px !important;
+  font-weight: 500 !important;
+}
+.chip.active{
+  background: var(--primary-container) !important;
+  color: var(--primary) !important;
+  border-color: rgba(26,115,232,0.25) !important;
+}
+
+/* Segmented tabs (Verwaltung branches, etc.) */
+.segmented-tabs{
+  background: var(--surface-2) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 999px !important;
+  padding: 4px !important;
+}
+.segmented-btn{
+  border-radius: 999px !important;
+  border: none !important;
+  background: transparent !important;
+  color: var(--text-sec) !important;
+  font-weight: 600 !important;
+}
+.segmented-btn.active, .segmented-btn[active], .segmented-btn[aria-selected="true"]{
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  box-shadow: 0 1px 2px rgba(60,64,67,0.18) !important;
+}
+
+/* Filter panel */
+#filter-panel{
+  background: var(--surface) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: none !important;
+}
+
+/* Bottom navigation (mobile) */
+nav.bottom-nav{
+  background: var(--surface) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-top: 1px solid var(--border) !important;
+  box-shadow: none !important;
+}
+.nav-item{
+  color: var(--text-sec) !important;
+  border-radius: 16px;
+  padding: 6px 0 !important;
+}
+.nav-item i{
+  width: 36px;
+  height: 36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius: 14px;
+}
+.nav-item.active{
+  color: var(--primary) !important;
+}
+.nav-item.active i{
+  background: var(--primary-container);
+}
+
+/* Modals: cleaner sheet */
+.modal-overlay{
+  background: rgba(32, 33, 36, 0.42) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.modal-content{
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-2) !important;
+}
+.close-icon{
+  background: var(--surface-2) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-sec) !important;
+}
+
+/* Toast */
+#toast{
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-2) !important;
+}
+
+/* Links */
+a, .msg-full a, .note-item a, .detail-item a{
+  color: var(--primary) !important;
+}
+
+/* Desktop layout: left navigation rail + wider content */
+@media (min-width: 900px){
+  #qs-app-root{
+    padding-left: 96px;
+  }
+
+  header.app-header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    padding: 0 16px;
+  }
+
+  /* make sure content starts under the header */
+  #qs-app-root > header + #filter-panel{
+    position: sticky;
+    top: 64px;
+    z-index: 90;
+  }
+
+  nav.bottom-nav{
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    right: auto;
+    width: 92px;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 12px 10px;
+    border-top: none !important;
+    border-right: 1px solid var(--border) !important;
+  }
+
+  .nav-item{
+    width: 100%;
+    padding: 10px 0 !important;
+  }
+
+  /* More comfortable spacing */
+  .p-4{ padding: 20px 24px !important; }
+  #students-list, #docs-list, #stats-container, #comm-list, #sent-list{
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -4155,14 +4450,14 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
           </button>
         </div>
 
-        <div class="comm-chips" id="msg-box-chips">
-          <button class="chip active" type="button" id="msg-chip-inbox" onclick="setMsgBox('inbox')">Eingang</button>
-          <button class="chip" type="button" id="msg-chip-sent" onclick="setMsgBox('sent')">Gesendet</button>
-        </div>
-
-        <div class="comm-chips" id="msg-filter-chips">
+        <div class="comm-chips">
           <button class="chip active" type="button" id="msg-chip-all" onclick="setMsgFilter('all')">Alle</button>
           <button class="chip" type="button" id="msg-chip-unread" onclick="setMsgFilter('unread')">Ungelesen</button>
+        </div>
+
+        <div class="segmented-tabs" id="msg-box-tabs" style="margin-top:6px;">
+          <button class="segmented-btn active" type="button" id="msg-box-in" onclick="setMsgBox('in')">Eingang</button>
+          <button class="segmented-btn" type="button" id="msg-box-out" onclick="setMsgBox('out')">Gesendet</button>
         </div>
 
         <div class="comm-notif">
@@ -4853,7 +5148,7 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
 
 
 <script>
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkCFioe3jZ8PItkMnA4skjHWbOVFm0ZOAvYfPStMZTkohuAShHDK4cdRlamRRBYth7-A/exec'; 
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby4li-qZFJCx_0MoXEA6zV390FjD9A9k_-XyZMV2CH4V9CZyhDXjWbGgvdikZVvZoUj/exec'; 
 
 
 // --- Optimistic UI + background Google Sheets sync (queue + retry) ---
@@ -6493,42 +6788,6 @@ function saveRemembered(lastType){
   try{ localStorage.setItem(rememberedKey(), JSON.stringify(payload)); }catch(e){}
 }
 
-// Auto-login on next visits when "Angemeldet bleiben" is enabled.
-// This uses the stored identifier + PIN (saved only when the checkbox is checked).
-function autoLoginIfRemembered(){
-  try{
-    // Avoid repeated auto attempts within the same tab session
-    if(sessionStorage.getItem('qs_auto_login_tried') === '1') return;
-    sessionStorage.setItem('qs_auto_login_tried','1');
-  }catch(e){}
-
-  let remember = false;
-  let id = '';
-  let pin = '';
-  try{
-    const raw = localStorage.getItem(rememberedKey());
-    if(raw){
-      const obj = JSON.parse(raw);
-      remember = !!obj.remember;
-      id  = obj.identifier || obj.staffUser || obj.studentId || '';
-      pin = obj.pin || obj.staffPin || obj.studentPin || '';
-    }
-  }catch(e){}
-
-  if(!remember) return;
-  if(!id || !pin) return;
-
-  try{ document.getElementById('chk-remember').checked = true; }catch(e){}
-  try{ const idEl = document.getElementById('login-identifier'); if(idEl) idEl.value = id; }catch(e){}
-  try{ const pinEl = document.getElementById('login-pin'); if(pinEl) pinEl.value = pin; }catch(e){}
-
-  try{ showLoginLoading(true, (state.lang==='ar' ? 'تسجيل الدخول تلقائياً…' : 'Automatische Anmeldung…')); }catch(e){}
-  // Let the UI paint the loading overlay first
-  setTimeout(()=>{ try{ doLogin(); }catch(e2){ try{ showLoginLoading(false); }catch(e3){} } }, 60);
-}
-
-
-
 function toggleLoginMode(mode) {
   state.loginMode = mode;
 
@@ -6897,13 +7156,6 @@ try{ if(studentPollingInterval){ clearInterval(studentPollingInterval); studentP
     }
   }catch(e){}
 
-
-  // Explicit logout: disable auto-login next time
-  try{
-    localStorage.removeItem(rememberedKey());
-    const chk = document.getElementById('chk-remember');
-    if(chk) chk.checked = false;
-  }catch(e){}
   try{ renderSavedProfiles(); }catch(e){}
 
   try{ document.getElementById('login-identifier')?.focus(); }catch(e){}
@@ -10165,7 +10417,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
   state.loginMode = state.loginMode || 'auto';
   applyRemembered();
   try{ renderSavedProfiles(); }catch(e){}
-  try{ autoLoginIfRemembered(); }catch(e){}
 
   try{ wireIosExitConfirm(); }catch(e){}
   try{ ensureExitGuardState(); }catch(e){}
@@ -16076,7 +16327,7 @@ function loadMessages() {
         if(maxRow) setMsgAfterRow(maxRow);
       }catch(e){}
 // Simple "push-like" browser notification on NEW unread message
-      const unread = state.messages.filter(m => isUnreadInbound(m));
+      const unread = state.messages.filter(m => m.status === 'neu');
       const latest = unread.reduce((a,b)=>{
         const ai = parseInt(a?.rowIndex ?? -1,10);
         const bi = parseInt(b?.rowIndex ?? -1,10);
@@ -16107,9 +16358,8 @@ function loadMessages() {
 
 function ensureCommUi(){
   if(!state.commUi){
-    state.commUi = { box: 'inbox', filter: 'all', search: '', open: null, composeOpen: false, selStudents: new Set() };
+    state.commUi = { box: 'in', filter: 'all', search: '', open: null, composeOpen: false, selStudents: new Set() };
   }
-  if(!state.commUi.box) state.commUi.box = 'inbox';
   // normalize legacy shapes
   if(!(state.commUi.selStudents instanceof Set)){
     try{ state.commUi.selStudents = new Set(state.commUi.selStudents || []); }catch(e){ state.commUi.selStudents = new Set(); }
@@ -16120,11 +16370,13 @@ function commStrings(){
   const de = state.lang === 'de';
   return {
     title: de ? 'Nachrichten' : 'الرسائل',
-    inbox: de ? 'Eingang' : 'الوارد',
-    sent: de ? 'Gesendet' : 'المرسلة',
     all: de ? 'Alle' : 'الكل',
     unread: de ? 'Ungelesen' : 'غير مقروء',
     search: de ? 'Suchen…' : 'بحث…',
+    inbox: de ? 'Eingang' : 'الوارد',
+    sent: de ? 'Gesendet' : 'المرسلة',
+    emptyInbox: de ? 'Keine eingegangenen Nachrichten.' : 'لا توجد رسائل واردة.',
+    emptySent: de ? 'Keine gesendeten Nachrichten.' : 'لا توجد رسائل مرسلة.',
     empty: de ? 'Keine Nachrichten.' : 'لا توجد رسائل.',
     copy: de ? 'Kopieren' : 'نسخ',
     close: de ? 'Schließen' : 'إغلاق',
@@ -16143,24 +16395,18 @@ function syncCommHeaderText(){
   const search = document.getElementById('msg-search');
   if(search) search.placeholder = S.search;
 
+  // inbox/sent tabs
+  const inBtn = document.getElementById('msg-box-in');
+  const outBtn = document.getElementById('msg-box-out');
+  if(inBtn) inBtn.textContent = S.inbox;
+  if(outBtn) outBtn.textContent = S.sent;
+
   // chips + unread count
-  const unreadCount = (state.messages || []).filter(m => m && isUnreadInbound(m)).length;
+  const unreadCount = (state.messages || []).filter(m => m && m.status === 'neu').length;
   const allBtn = document.getElementById('msg-chip-all');
   const unBtn = document.getElementById('msg-chip-unread');
   if(allBtn) allBtn.textContent = S.all;
   if(unBtn) unBtn.textContent = unreadCount ? `${S.unread} (${unreadCount})` : S.unread;
-
-  const inboxBtn = document.getElementById('msg-chip-inbox');
-  const sentBtn  = document.getElementById('msg-chip-sent');
-  if(inboxBtn) inboxBtn.textContent = S.inbox;
-  if(sentBtn)  sentBtn.textContent  = S.sent;
-
-  const boxMode = state.commUi.box || 'inbox';
-  if(inboxBtn) inboxBtn.classList.toggle('active', boxMode !== 'sent');
-  if(sentBtn)  sentBtn.classList.toggle('active', boxMode === 'sent');
-
-  const filterWrap = document.getElementById('msg-filter-chips');
-  if(filterWrap) filterWrap.classList.toggle('hidden', boxMode === 'sent');
 
   const filter = state.commUi.filter || 'all';
   if(allBtn) allBtn.classList.toggle('active', filter !== 'unread');
@@ -16193,6 +16439,9 @@ function initCommUI(){
   if(overlay) overlay.classList.toggle('hidden', !state.commUi.composeOpen);
   document.body.classList.toggle('compose-open', !!state.commUi.composeOpen);
   syncCommHeaderText();
+  updateMsgBoxTabs();
+  updateMsgBoxTabs();
+
 }
 function setMsgFilter(mode){
   ensureCommUi();
@@ -16202,16 +16451,22 @@ function setMsgFilter(mode){
   renderMessages();
 }
 
-function setMsgBox(mode){
+function setMsgBox(box){
   ensureCommUi();
-  const next = (mode === 'sent') ? 'sent' : 'inbox';
-  if(state.commUi.box === next) return;
-  state.commUi.box = next;
+  state.commUi.box = (box === 'out') ? 'out' : 'in';
   state.commUi.open = null;
-  // Sent box does not have unread filter
-  if(next === 'sent') state.commUi.filter = 'all';
+  updateMsgBoxTabs();
   syncCommHeaderText();
   renderMessages();
+}
+
+function updateMsgBoxTabs(){
+  ensureCommUi();
+  const inBtn = document.getElementById('msg-box-in');
+  const outBtn = document.getElementById('msg-box-out');
+  const box = state.commUi.box || 'in';
+  if(inBtn) inBtn.classList.toggle('active', box === 'in');
+  if(outBtn) outBtn.classList.toggle('active', box === 'out');
 }
 
 function onMsgSearch(val){
@@ -16274,7 +16529,7 @@ function toggleMsgOpen(rowIndex){
 
   if(state.commUi.open){
     const msg = (state.messages || []).find(m => String(m.rowIndex) === state.commUi.open);
-    if(msg && msg.status === 'neu' && isInboundToMe(msg) && !isFromMeMessage(msg)){
+    if(msg && msg.status === 'neu'){
       markRead(msg.rowIndex);
       return;
     }
@@ -16314,28 +16569,6 @@ function copyMsg(rowIndex){
   }
 }
 
-function resolveStudentNameByRef(ref){
-  const r = String(ref || '').trim();
-  if(!r) return '';
-  const list = Array.isArray(state.students) ? state.students : [];
-  const s = list.find(x => String(x?.referenz ?? x?.studentRef ?? x?.ref ?? '').trim() === r);
-  return s ? String(s.fullName || '').trim() : '';
-}
-
-function msgRecipientDisplay(msg){
-  const de = (state.lang === 'de');
-  const type = String(msg?.recipientType || '').trim();
-  const nameRaw = String(msg?.recipientName || '').trim();
-
-  if(type === 'Admin') return de ? 'Admin' : 'الإدارة';
-  if(type === 'Lehrer') return nameRaw || (de ? 'Lehrer' : 'المعلمون');
-  if(type === 'Student'){
-    const friendly = resolveStudentNameByRef(nameRaw);
-    return friendly || nameRaw || (de ? 'Schüler' : 'طالب');
-  }
-  return nameRaw || (de ? 'Empfänger' : 'مستلم');
-}
-
 function renderMessages() {
   ensureCommUi();
   syncCommHeaderText();
@@ -16353,23 +16586,21 @@ function renderMessages() {
     return 0;
   });
 
-  const boxMode = state.commUi.box || 'inbox';
   const filter = state.commUi.filter || 'all';
   const q = (state.commUi.search || '').trim().toLowerCase();
+  const boxMode = state.commUi.box || 'in';
 
-  let msgs = raw.filter(m=>{
+  const msgs = raw.filter(m=>{
     if(!m) return false;
-    if(boxMode === 'sent') return isFromMeMessage(m);
-    // inbox
-    return isInboundToMe(m) && !isFromMeMessage(m);
-  });
-
-  msgs = msgs.filter(m=>{
-    if(boxMode !== 'sent'){
-      if(filter === 'unread' && !isUnreadInbound(m)) return false;
+    // Inbox/Sent split
+    if(boxMode === 'in'){
+      if(!isInboundToMe(m) || isFromMeMessage(m)) return false;
+    }else{
+      if(!isFromMeMessage(m)) return false;
     }
+    if(filter === 'unread' && m.status !== 'neu') return false;
     if(q){
-      const hay = `${m.senderName||''} ${m.recipientType||''} ${m.recipientName||''} ${m.timestamp||''} ${m.messageText||''}`.toLowerCase();
+      const hay = `${m.senderName||''} ${m.recipientName||''} ${m.recipientType||''} ${m.timestamp||''} ${m.messageText||''}`.toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;
@@ -16377,10 +16608,8 @@ function renderMessages() {
 
   if(msgs.length === 0){
     const S = commStrings();
-    const empty = (boxMode === 'sent')
-      ? ((state.lang === 'de') ? 'Keine gesendeten Nachrichten.' : 'لا توجد رسائل مرسلة.')
-      : S.empty;
-    box.innerHTML = `<div class="msg-empty">${escapeHtml(empty)}</div>`;
+    const emptyText = (boxMode === 'out') ? (S.emptySent || S.empty) : (S.emptyInbox || S.empty);
+    box.innerHTML = `<div class="msg-empty">${escapeHtml(emptyText)}</div>`;
     return;
   }
 
@@ -16390,26 +16619,25 @@ function renderMessages() {
   let html = '';
   msgs.forEach(msg=>{
     const id = String(msg.rowIndex || '');
+    const isUnread = msg.status === 'neu';
     const isOpen = openId && openId === id;
 
+    const sender = escapeHtml(msg.senderName || (de ? 'Unbekannt' : 'غير معروف'));
+    const recip = escapeHtml(msg.recipientName || (de ? 'Empfänger' : 'المستلم'));
+    const recipType = escapeHtml(msg.recipientType || '');
+    const headline = (boxMode === 'out') ? `${de ? 'An: ' : 'إلى: '}${recip}${recipType ? ' • ' + recipType : ''}` : sender;
+    const time = escapeHtml(msg.timestamp || '');
     const rawText = String(msg.messageText || '');
+
     const snippet = rawText.replace(/\s+/g,' ').trim().slice(0, 140);
     const snippetHtml = escapeHtml(snippet);
-
-    const isUnread = (boxMode !== 'sent' && isUnreadInbound(msg));
-
-    const title = (boxMode === 'sent')
-      ? `${de ? 'An: ' : 'إلى: '}${escapeHtml(msgRecipientDisplay(msg))}`
-      : escapeHtml(msg.senderName || (de ? 'Unbekannt' : 'غير معروف'));
-
-    const time = escapeHtml(msg.timestamp || '');
 
     html += `
       <div class="msg-item ${isUnread ? 'unread' : ''}">
         <div class="msg-top" onclick="toggleMsgOpen('${id}')">
           <div class="msg-left">
             <div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px;">
-              <div class="msg-sender">${title}</div>
+              <div class="msg-sender">${headline}</div>
               <div class="msg-time">${time}</div>
             </div>
             <div class="msg-snippet">${snippetHtml || '&nbsp;'}</div>
@@ -16452,7 +16680,7 @@ function markRead(idx) {
 
 function updateMsgBadge() {
   const msgs = Array.isArray(state.messages) ? state.messages : [];
-  const c = msgs.filter(m => m && isUnreadInbound(m)).length;
+  const c = msgs.filter(m => m && m.status === 'neu').length;
 
   const setBadge = (el) => {
     if(!el) return;
@@ -16468,7 +16696,6 @@ function updateMsgBadge() {
   setBadge(document.getElementById('badge-msg-nav-stu'));   // student bottom nav (kept hidden)
   setBadge(document.getElementById('badge-msg-hdr-stu'));   // student header icon
 }
-
 
 
 function populateTeacherSelect() {
@@ -16650,57 +16877,25 @@ function isCommTabVisible(){
   return !!el && !el.classList.contains('hidden');
 }
 
-function normalizePersonKey(v){
-  // normalize names like "Soulayman (Lehrer)" -> "soulayman"
-  let s = String(v || '').trim();
-  s = s.replace(/\s+/g,' ');
-  // remove trailing role suffix in parentheses
-  s = s.replace(/\s*\([^)]*\)\s*$/,'');
-  // common separators
-  s = s.replace(/\s*[-–—]\s*(admin|lehrer|student|schüler|eltern)\s*$/i,'');
-  return s.trim().toLowerCase();
-}
-
 function isFromMeMessage(m){
-  const myUser = normalizePersonKey(state.user || '');
+  const myUser = String(state.user || '').trim();
   const myRef  = String(state.studentData?.referenz || '').trim();
-  const senderRaw = String(m?.senderName || '').trim();
-  const sender = normalizePersonKey(senderRaw);
-
-  // direct name match (normalized)
-  if(myUser && sender && sender === myUser) return true;
-
-  // fallback: sometimes senderName contains role or extra info
-  if(myUser && senderRaw && normalizePersonKey(senderRaw).startsWith(myUser)) return true;
-
-  // studentRef match (some sheets store sender as ref)
-  if(myRef && senderRaw && String(senderRaw).trim() === myRef) return true;
-
-  return false;
+  const sender = String(m?.senderName || '').trim();
+  return (!!myUser && sender === myUser) || (!!myRef && sender === myRef);
 }
 
 function isInboundToMe(m){
   const role = String(state.role || '').toLowerCase();
   if(role === 'admin') return String(m?.recipientType||'') === 'Admin';
-  if(role === 'lehrer' || role === 'teacher'){
-    const recType = String(m?.recipientType||'');
-    if(recType !== 'Lehrer') return false;
-    const to = normalizePersonKey(m?.recipientName || '');
-    const me = normalizePersonKey(state.user || '');
-    return !!me && !!to && to === me;
-  }
+  if(role === 'lehrer') return String(m?.recipientType||'') === 'Lehrer' && String(m?.recipientName||'').trim() === String(state.user||'').trim();
   if(role === 'student'){
     const myRef = String(state.studentData?.referenz || '').trim();
     const to = String(m?.recipientName||'').trim();
     return String(m?.recipientType||'') === 'Student' && (
-      (myRef && to === myRef) || (!myRef && normalizePersonKey(to) === normalizePersonKey(state.user||''))
+      (myRef && to === myRef) || (!myRef && to === String(state.user||'').trim())
     );
   }
   return false;
-}
-
-function isUnreadInbound(m){
-  return !!m && String(m.status||'') === 'neu' && isInboundToMe(m) && !isFromMeMessage(m);
 }
 
 // Small beep without external audio files
