@@ -3483,6 +3483,209 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
   color: var(--text-sec);
 }
 
+
+
+/* ===== Messages tab: screenshot-style design (v128) ===== */
+#tab-comm{
+  background: var(--bg);
+  padding: 10px 12px 90px;
+}
+
+#tab-comm .comm-header{
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin: 0 0 10px;
+  padding: 6px 0 10px;
+  background: var(--bg);
+  border-bottom: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+#tab-comm .comm-title-row{
+  padding: 0 2px;
+}
+
+#tab-comm .comm-title{
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+#tab-comm .comm-header .icon-btn{
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  border: 1px solid rgba(60,60,67,0.10);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+#tab-comm .comm-tools{
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#tab-comm .comm-search{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 10px 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+#tab-comm .comm-search i{
+  color: var(--text-sec);
+}
+
+#tab-comm .comm-search input{
+  font-size: 1rem;
+}
+
+#tab-comm .comm-filterchips{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+#tab-comm .comm-filterchips .chip{
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-sec);
+  font-weight: 800;
+}
+
+#tab-comm .comm-filterchips .chip.active{
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+#tab-comm .comm-segmented{
+  background: var(--surface-2);
+  border-radius: 16px;
+  padding: 4px;
+  gap: 0 !important;
+  display:flex;
+}
+
+#tab-comm .comm-segmented .chip{
+  flex: 1;
+  border-radius: 14px;
+  padding: 10px 0;
+  background: transparent;
+  border: 0;
+  color: var(--text-sec);
+  font-weight: 900;
+}
+
+#tab-comm .comm-segmented .chip.active{
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.14);
+}
+
+#tab-comm .comm-notif{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+#tab-comm .comm-notif .filter-checkbox{
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+#tab-comm .messages-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top: 12px;
+}
+
+#tab-comm .msg-item{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 12px 12px 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+#tab-comm .msg-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+
+#tab-comm .msg-left{
+  flex: 1;
+  min-width: 0;
+}
+
+#tab-comm .msg-sender{
+  font-weight: 900;
+  font-size: 1.02rem;
+  color: var(--text);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+#tab-comm .msg-time{
+  font-size: 0.82rem;
+  color: var(--text-sec);
+  white-space:nowrap;
+  flex: 0 0 auto;
+}
+
+#tab-comm .msg-snippet{
+  margin-top: 4px;
+  font-size: 0.92rem;
+  color: var(--text-sec);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+#tab-comm .msg-dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--primary);
+  margin-top: 6px;
+  flex: 0 0 auto;
+}
+
+#tab-comm .msg-open{
+  margin-top: 10px;
+  background: rgba(118,118,128,0.08);
+  border-radius: 14px;
+  padding: 10px;
+  border: 1px solid rgba(60,60,67,0.10);
+}
+
+#tab-comm .msg-actions{
+  gap: 8px;
+}
+
+#tab-comm .msg-actions .btn{
+  margin-top: 0;
+}
+
+#tab-comm .msg-actions .btn.btn-sec{
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
 </style>
 <style id="qc-audio-css">
 /* Quran.com-inspired minimal iPhone-style bottom audio bar (RTL) */
@@ -4155,14 +4358,14 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
           </button>
         </div>
 
-        <div class="comm-chips" id="msg-box-chips">
-          <button class="chip active" type="button" id="msg-chip-inbox" onclick="setMsgBox('inbox')">Eingang</button>
-          <button class="chip" type="button" id="msg-chip-sent" onclick="setMsgBox('sent')">Gesendet</button>
-        </div>
-
-        <div class="comm-chips" id="msg-filter-chips">
+        <div class="comm-chips comm-filterchips" id="msg-filter-chips">
           <button class="chip active" type="button" id="msg-chip-all" onclick="setMsgFilter('all')">Alle</button>
           <button class="chip" type="button" id="msg-chip-unread" onclick="setMsgFilter('unread')">Ungelesen</button>
+        </div>
+
+        <div class="comm-chips comm-segmented" id="msg-box-chips">
+          <button class="chip active" type="button" id="msg-chip-inbox" onclick="setMsgBox('inbox')">Eingang</button>
+          <button class="chip" type="button" id="msg-chip-sent" onclick="setMsgBox('sent')">Gesendet</button>
         </div>
 
         <div class="comm-notif">
@@ -7700,6 +7903,19 @@ function renderStudentHomeworkCards(homeworkArr, contEl){
     const rangeTxt = (a1 && a2) ? `${escapeHtml(a1)} - ${escapeHtml(a2)}` : escapeHtml(a1 || a2 || '');
     const rangeHtml = rangeTxt ? `<span class="hw-ayah-range ${confirmed ? 'confirmed' : 'pending'}">${rangeTxt}</span>` : '';
 
+    // For TEXT|... homework: show the written text (not only "نص حر")
+    let titleLine = '';
+    let bodyLine = '';
+    if(info.kind === 'text'){
+      const t = (info.freeText || '').trim();
+      titleLine = (state.lang === 'de' ? '📝 Text' : '📝 نص حر');
+      bodyLine = `<div class="text-sm" style="white-space:pre-wrap;">${escapeHtml(t || (state.lang==='de'?'(leer)':'(فارغ)'))}</div>`;
+    }else{
+      titleLine = `${escapeHtml(info.label)} ${badge}`;
+      bodyLine = rangeHtml ? `<div class="text-sm">${state.lang === 'de' ? 'Verse' : 'الآيات'}: ${rangeHtml}</div>` : '';
+    }
+
+
     const canOpen = !!info.surahNum && !!a1 && !!a2;
     const cardOnclick = canOpen
       ? `onclick="handleStudentHwCardClick(event, ${Number(info.surahNum)}, ${Number(a1)}, ${Number(a2)})"`
@@ -7708,8 +7924,12 @@ function renderStudentHomeworkCards(homeworkArr, contEl){
 
     const cardCls = confirmed ? 'hw-confirmed' : 'hw-pending';
     const confText = confirmed
-      ? (state.lang === 'de' ? '✅ Bestätigt' : '✅ تم التسميع')
-      : (state.lang === 'de' ? '⏳ Offen' : '⏳ غير مسمَّع');
+      ? (state.lang === 'de'
+          ? (info.kind === 'text' ? '✅ Erledigt' : '✅ Bestätigt')
+          : (info.kind === 'text' ? '✅ تم' : '✅ تم التسميع'))
+      : (state.lang === 'de'
+          ? '⏳ Offen'
+          : (info.kind === 'text' ? '⏳ لم يتم' : '⏳ غير مسمَّع'));
 
     const openBtn = canOpen
       ? `<button class="btn btn-sm" type="button" style="flex:1;" onclick="openQuranAt(${Number(info.surahNum)}, ${Number(a1)}, ${Number(a2)}, {from:'student-hw'})">📖 ${state.lang === 'de' ? 'Öffnen' : 'فتح'}</button>`
@@ -7724,8 +7944,8 @@ function renderStudentHomeworkCards(homeworkArr, contEl){
 
     contEl.innerHTML += `
       <div class="card flex-col student-hw-card ${cardCls}" style="align-items:flex-start; ${cardCursor}" ${cardOnclick}>
-        <div style="font-weight:bold; color:var(--primary);">${escapeHtml(info.label)} ${badge}</div>
-        ${rangeHtml ? `<div class="text-sm">${state.lang === 'de' ? 'Verse' : 'الآيات'}: ${rangeHtml}</div>` : ''}
+        <div style="font-weight:bold; color:var(--primary);">${titleLine}</div>
+        ${bodyLine}
         <div class="text-sm text-sec">${meta} ${parentChip}</div>
         <div class="text-sm stu-hw-status" style="font-weight:800; color:${confirmed ? 'var(--success)' : 'var(--warning)'};">${confText}</div>
         ${actionsRow}
