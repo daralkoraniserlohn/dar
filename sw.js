@@ -2,7 +2,7 @@
    كل ما تغيّر CACHE_VERSION أو CACHE_NAME → يتم حذف كل الكاشات القديمة تلقائياً في activate
 */
 
-const CACHE_VERSION = "v1.0.8"; // غيّرها عند كل تحديث
+const CACHE_VERSION = "v1.0.9"; // غيّرها عند كل تحديث
 const CACHE_NAME = `masjid-app-cache-${CACHE_VERSION}`;
 
 // عدّل الملفات اللي تريدها تتخزن Offline
