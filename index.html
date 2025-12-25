@@ -4854,28 +4854,36 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
              <label class="form-label">Hifz (Hafiz)</label>
              <select id="eval-hifz" class="form-select">
                  <option value="">—</option>
-                 <option value="Sehr Gut">Sehr Gut (ممتاز)</option>
-                 <option value="Gut">Gut (جيد)</option>
-                 <option value="Mittel">Mittel (متوسط)</option>
-                 <option value="Schwach">Schwach (ضعيف)</option>
+                 <option value="1">1 (Sehr gut / ممتاز)</option>
+                 <option value="2">2 (Gut / جيد)</option>
+                 <option value="3">3 (Befriedigend / جيد-متوسط)</option>
+                 <option value="4">4 (Ausreichend / مقبول)</option>
+                 <option value="5">5 (Mangelhaft / ضعيف)</option>
+                 <option value="6">6 (Ungenügend / سيّء)</option>
              </select>
          </div>
          <div class="form-group">
              <label class="form-label">Tajweed</label>
              <select id="eval-tajweed" class="form-select">
                  <option value="">—</option>
-                 <option value="Sehr Gut">Sehr Gut</option>
-                 <option value="Gut">Gut</option>
-                 <option value="Mittel">Mittel</option>
+                 <option value="1">1 (Sehr gut / ممتاز)</option>
+                 <option value="2">2 (Gut / جيد)</option>
+                 <option value="3">3 (Befriedigend / جيد-متوسط)</option>
+                 <option value="4">4 (Ausreichend / مقبول)</option>
+                 <option value="5">5 (Mangelhaft / ضعيف)</option>
+                 <option value="6">6 (Ungenügend / سيّء)</option>
              </select>
          </div>
          <div class="form-group">
              <label class="form-label">Verhalten</label>
              <select id="eval-behavior" class="form-select">
                  <option value="">—</option>
-                 <option value="Vorbildlich">Vorbildlich</option>
-                 <option value="Gut">Gut</option>
-                 <option value="Störend">Störend</option>
+                 <option value="1">1 (Sehr gut / ممتاز)</option>
+                 <option value="2">2 (Gut / جيد)</option>
+                 <option value="3">3 (Befriedigend / جيد-متوسط)</option>
+                 <option value="4">4 (Ausreichend / مقبول)</option>
+                 <option value="5">5 (Mangelhaft / ضعيف)</option>
+                 <option value="6">6 (Ungenügend / سيّء)</option>
              </select>
          </div>
          <div class="form-group">
@@ -5064,7 +5072,7 @@ body.koran-mode #koran-page-wrap.koran-page-wrap{
 
 
 <script>
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkCFioe3jZ8PItkMnA4skjHWbOVFm0ZOAvYfPStMZTkohuAShHDK4cdRlamRRBYth7-A/exec'; 
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwt8qhIAmGtmZ3YINNdvoTs3Kh0JExwamuDqSmrkwdWqgu-UEhxb_JrYAHN9Uzyj0LQ/exec'; 
 
 
 
@@ -8085,12 +8093,24 @@ function loadStudentHomework() {
 }
 
 function evalToStars(text) {
-  const t = String(text || '').trim().toLowerCase();
-  if(!t) return null;
-  if (t.includes('sehr gut') || t.includes('ممتاز')) return 5;
+  const raw = String(text || '').trim();
+  if(!raw) return null;
+
+  // Numeric grade 1..6 (1 best, 6 worst) → stars 5..0
+  const n = Number(raw);
+  if(!isNaN(n) && n >= 1 && n <= 6){
+    return Math.max(0, Math.min(5, 6 - Math.round(n))); // 1→5, 6→0
+  }
+
+  // Legacy word mapping (backward compatible)
+  const t = raw.toLowerCase();
+  if (t.includes('sehr gut') || t.includes('ممتاز') || t.includes('vorbild')) return 5;
   if (t.includes('gut') || t.includes('جيد')) return 4;
+  if (t.includes('befried') ) return 3;
   if (t.includes('mittel') || t.includes('متوسط')) return 3;
-  if (t.includes('schwach') || t.includes('ضعيف')) return 2;
+  if (t.includes('ausreich') || t.includes('مقبول')) return 2;
+  if (t.includes('mangel') || t.includes('ضعيف') || t.includes('stör') || t.includes('stor')) return 1;
+  if (t.includes('ungen') || t.includes('سيء') || t.includes('سيئ')) return 0;
   return 3;
 }
 
@@ -18974,19 +18994,24 @@ function openAiPdfReportModal(){
     return;
   }
 
-  // defaults
-  const now = new Date();
-  const monthInput = document.getElementById('ai-pdf-month');
-  const yearInput  = document.getElementById('ai-pdf-year');
-  if(monthInput){
-    const m = String(now.getMonth()+1).padStart(2,'0');
-    monthInput.value = `${now.getFullYear()}-${m}`;
-  }
-  if(yearInput){
-    yearInput.value = String(now.getFullYear());
-  }
+  // defaults (date range)
+const now = new Date();
+const fromEl = document.getElementById('ai-pdf-from');
+const toEl   = document.getElementById('ai-pdf-to');
+const pad2 = (n)=> String(n).padStart(2,'0');
+const fmt = (d)=> `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
 
-  // clear fields
+// Default: current month
+if(fromEl){
+  const first = new Date(now.getFullYear(), now.getMonth(), 1);
+  fromEl.value = fromEl.value || fmt(first);
+}
+if(toEl){
+  const last = new Date(now.getFullYear(), now.getMonth()+1, 0);
+  toEl.value = toEl.value || fmt(last);
+}
+
+// clear fields
   const draftEl = document.getElementById('ai-pdf-draft');
   const teacherEl = document.getElementById('ai-pdf-teacher');
   const finalEl = document.getElementById('ai-pdf-final');
@@ -19104,68 +19129,58 @@ async function translateAiFinalText(){
 
 
 function getAiPdfPeriodData_(){
-  const picked = document.querySelector('input[name="ai-pdf-period"]:checked')?.value || 'monthly';
-  const monthInput = document.getElementById('ai-pdf-month');
-  const yearInput  = document.getElementById('ai-pdf-year');
-
-  let year = null, month = null;
-  if(picked === 'monthly'){
-    const v = (monthInput && monthInput.value) ? String(monthInput.value) : '';
-    // expected: YYYY-MM
-    if(v && v.includes('-')){
-      const parts = v.split('-');
-      year = parseInt(parts[0],10);
-      month = parseInt(parts[1],10);
-    }
-  }else{
-    year = parseInt((yearInput && yearInput.value) ? yearInput.value : '', 10);
-  }
+  const fromEl = document.getElementById('ai-pdf-from');
+  const toEl   = document.getElementById('ai-pdf-to');
 
   const now = new Date();
-  if(!year) year = now.getFullYear();
-  if(picked === 'monthly'){
-    if(!month) month = now.getMonth()+1;
-    if(month < 1) month = 1;
-    if(month > 12) month = 12;
+  const pad2 = (n)=> String(n).padStart(2,'0');
+  const fmt = (d)=> `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+
+  // Default range: current month
+  if(fromEl && !fromEl.value){
+    const first = new Date(now.getFullYear(), now.getMonth(), 1);
+    fromEl.value = fmt(first);
   }
-  return { period: picked, year, month };
+  if(toEl && !toEl.value){
+    const last = new Date(now.getFullYear(), now.getMonth()+1, 0);
+    toEl.value = fmt(last);
+  }
+
+  let from = (fromEl && fromEl.value) ? String(fromEl.value) : fmt(new Date(now.getFullYear(), now.getMonth(), 1));
+  let to   = (toEl && toEl.value) ? String(toEl.value) : fmt(new Date(now.getFullYear(), now.getMonth()+1, 0));
+
+  // If swapped, correct it
+  if(from && to && from > to){
+    const tmp = from; from = to; to = tmp;
+    if(fromEl) fromEl.value = from;
+    if(toEl) toEl.value = to;
+  }
+
+  return { period:'custom', from, to };
 }
 
+
 function updateAiPdfPeriodUi_(){
-  const picked = document.querySelector('input[name="ai-pdf-period"]:checked')?.value || 'monthly';
-  const monthInput = document.getElementById('ai-pdf-month');
-  const yearInput  = document.getElementById('ai-pdf-year');
-
-  if(monthInput) monthInput.style.display = (picked === 'monthly') ? '' : 'none';
-  if(yearInput)  yearInput.style.display  = (picked === 'yearly') ? '' : 'none';
-
-  // Range label
   const rangeEl = document.getElementById('ai-pdf-report-range');
   if(rangeEl){
     const p = getAiPdfPeriodData_();
-    const from = (p.period === 'yearly')
-      ? new Date(p.year, 0, 1)
-      : new Date(p.year, (p.month||1)-1, 1);
-    const to = (p.period === 'yearly')
-      ? new Date(p.year, 11, 31)
-      : new Date(p.year, (p.month||1), 0);
-    const fmt = (d)=> `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     rangeEl.textContent = (state.lang==='ar')
-      ? `الفترة: ${fmt(from)} → ${fmt(to)}`
-      : `Zeitraum: ${fmt(from)} → ${fmt(to)}`;
+      ? `الفترة: ${p.from} → ${p.to}`
+      : `Zeitraum: ${p.from} → ${p.to}`;
   }
 }
 
 (function bindAiPdfPeriodChange(){
   try{
     document.addEventListener('change', (e)=>{
-      if(e?.target?.name === 'ai-pdf-period' || e?.target?.id === 'ai-pdf-month' || e?.target?.id === 'ai-pdf-year' || e?.target?.id === 'ai-pdf-lang'){
+      if(e?.target?.id === 'ai-pdf-from' || e?.target?.id === 'ai-pdf-to' || e?.target?.id === 'ai-pdf-lang'){
         updateAiPdfPeriodUi_();
         if(e?.target?.id === 'ai-pdf-lang') setAiPdfTranslateDefault_();
       }
     });
   }catch(e){}
 })();
+;
 
 async function fetchAiPeriodDraft(){
   if(!isTeacherOrAdmin()){
@@ -19189,8 +19204,8 @@ async function fetchAiPeriodDraft(){
       action: 'getStudentPeriodDraft',
       studentRef: s.referenz,
       period: p.period,
-      year: p.year,
-      month: p.month,
+      dateFrom: p.from,
+      dateTo: p.to,
       role: state.role,
       lang: getAiPdfReportLang_()});
 
@@ -19250,8 +19265,8 @@ async function generateAiPeriodReportText(){
       action: 'generateStudentPeriodReportText',
       studentRef: s.referenz,
       period: p.period,
-      year: p.year,
-      month: p.month,
+      dateFrom: p.from,
+      dateTo: p.to,
       role: state.role,
       lang: getAiPdfReportLang_(),
       draftText: draftText,
@@ -19260,7 +19275,8 @@ async function generateAiPeriodReportText(){
 
     if(!res || !res.ok){
       const msg = res?.error || 'error';
-      if(st) st.textContent = (state.lang==='ar') ? `فشل إنشاء التقرير: ${msg}` : `Fehler: ${msg}`;
+      const det = (res?.detail) ? ` — ${res.detail}` : '';
+      if(st) st.textContent = (state.lang==='ar') ? `فشل إنشاء التقرير: ${msg}${det}` : `Fehler: ${msg}${det}`;
       return;
     }
 
@@ -19343,8 +19359,8 @@ async function generateAiPdfFromText(){
       action: 'generateStudentReportPdf',
       studentRef: s.referenz,
       period: p.period,
-      year: p.year,
-      month: p.month,
+      dateFrom: p.from,
+      dateTo: p.to,
       role: state.role,
       lang: getAiPdfReportLang_(),
       reportText: reportText,
@@ -19423,13 +19439,16 @@ function triggerDownload_(url, filename){
       اختر فترة التقرير، شاهد الملخص التلقائي، وأضف تقرير المعلم ثم ندمجه عبر Gemini لإخراج تقرير تربوي إسلامي.
     </p>
 
-    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px;">
-      <label class="chip" style="cursor:pointer; user-select:none;">
-        <input type="radio" name="ai-pdf-period" value="monthly" checked style="margin-inline-end:6px;"> شهري
-      </label>
-      <label class="chip" style="cursor:pointer; user-select:none;">
-        <input type="radio" name="ai-pdf-period" value="yearly" style="margin-inline-end:6px;"> سنوي
-      </label>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:10px;">
+      <div class="form-group" style="min-width:320px;">
+        <label class="form-label" style="margin-bottom:6px;">الفترة (من → إلى)</label>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <input class="form-input" type="date" id="ai-pdf-from" style="max-width:180px; height:40px;" />
+          <span class="text-sec">→</span>
+          <input class="form-input" type="date" id="ai-pdf-to" style="max-width:180px; height:40px;" />
+        </div>
+      </div>
+
       <div class="form-group" style="min-width:200px;">
         <label class="form-label" style="margin-bottom:6px;">Bericht-Sprache</label>
         <select id="ai-pdf-lang" class="form-select" style="height:40px; max-width:200px;">
@@ -19437,13 +19456,9 @@ function triggerDownload_(url, filename){
           <option value="ar">العربية</option>
         </select>
       </div>
-
-
-      <input class="form-input" type="month" id="ai-pdf-month" style="max-width:180px; height:40px;" />
-      <input class="form-input" type="number" id="ai-pdf-year" style="max-width:120px; height:40px;" min="2020" max="2100" />
     </div>
 
-    <div class="card" style="padding:12px; margin:0 0 10px 0;">
+<div class="card" style="padding:12px; margin:0 0 10px 0;">
       <div class="text-sm text-sec" id="ai-pdf-report-range"></div>
     </div>
 
